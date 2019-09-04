@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_travelog"
+        android:id="@+id/navigation_dashboard"
         android:name="com.bolo.bolomap.ui.travelog.TravelogFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_travelog" />
+        tools:layout="@layout/fragment_dashboard" />
 
 </navigation>

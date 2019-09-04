@@ -21,8 +21,8 @@ class TravelogFragment : Fragment() {
     ): View? {
         travelogViewModel =
             ViewModelProviders.of(this).get(TravelogViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_travelog, container, false)
-        val textView: TextView = root.findViewById(R.id.text_travelog)
+        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        val textView: TextView = root.findViewById(R.id.text_dashboard)
         travelogViewModel.text.observe(this, Observer {
             textView.text = it
         })
