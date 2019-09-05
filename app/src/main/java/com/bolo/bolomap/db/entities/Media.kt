@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 import kotlin.collections.ArrayList
 
-@Entity
+@Entity(tableName = "media")
 data class Media (
     @PrimaryKey val id: Int,
     @ColumnInfo(name = "date") val date: String?,
