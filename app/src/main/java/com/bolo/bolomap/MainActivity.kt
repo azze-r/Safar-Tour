@@ -22,19 +22,17 @@ class MainActivity : AppCompatActivity() {
 
         navView.setupWithNavController(navController)
 
-        val media = Media(0,null,null,null,null,null,null)
+        val media = Media(1,null,null,null,null,null,null)
 
-        val database = WordRoomDatabase.getDatabase(this)
+        val database = RoomDatabase.getDatabase(this)
 
         mediaDao = database.mediaDao()
 
         val array = ArrayList<Media>()
         array.add(media)
 
-
-
 //        mediaDao!!.insertAll(media)
-        insert(media)
+//        insert(media)
 
 
     }
