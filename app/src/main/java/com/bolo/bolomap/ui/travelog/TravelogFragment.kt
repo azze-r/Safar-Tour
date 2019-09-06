@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import com.bolo.bolomap.R
+import com.bolo.bolomap.ui.media.MediaFormFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
@@ -40,6 +42,9 @@ class TravelogFragment : Fragment() {
             } else {
                 closeFABMenu()
             }
+        }
+        fab1.setOnClickListener {
+            it.findNavController().navigate(R.id.action_navigation_dashboard_to_navigation_media_form)
         }
         return root
     }
