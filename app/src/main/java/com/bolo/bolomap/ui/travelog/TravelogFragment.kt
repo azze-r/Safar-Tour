@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bolo.bolomap.R
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.Marker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.fragment_dashboard.*
-
 
 class TravelogFragment : Fragment() {
 
@@ -20,6 +18,7 @@ class TravelogFragment : Fragment() {
     lateinit var fab1: FloatingActionButton
     lateinit var fab2: FloatingActionButton
     lateinit var fab3: FloatingActionButton
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
