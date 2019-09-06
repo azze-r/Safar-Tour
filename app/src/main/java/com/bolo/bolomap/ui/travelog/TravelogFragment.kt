@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import com.bolo.bolomap.R
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.Marker
+import com.bolo.bolomap.ui.media.MediaFormFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class TravelogFragment : Fragment() {
@@ -39,6 +41,9 @@ class TravelogFragment : Fragment() {
             } else {
                 closeFABMenu()
             }
+        }
+        fab1.setOnClickListener {
+            it.findNavController().navigate(R.id.action_navigation_dashboard_to_navigation_media_form)
         }
         return root
     }
