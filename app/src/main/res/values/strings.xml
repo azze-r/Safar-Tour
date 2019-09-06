@@ -2,4 +2,7 @@
     <string name="app_name">BoloMap</string>
     <string name="title_home">Map</string>
     <string name="title_dashboard">Travelog</string>
+    <string name="description">Description</string>
+    <string name="Title">Titre</string>
+    <string name="save">Enregistrer</string>
 </resources>
