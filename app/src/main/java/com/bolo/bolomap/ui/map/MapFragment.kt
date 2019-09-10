@@ -13,9 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.bolo.bolomap.MainActivity
 import com.bolo.bolomap.R
@@ -28,7 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_home.*
 import com.bolo.bolomap.utils.BaseFragment
 
-class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
 
     private lateinit var homeViewModel: MapViewModel
@@ -41,17 +41,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     lateinit var fab2: FloatingActionButton
     lateinit var fab3: FloatingActionButton
     var isFABOpen = false
-    val REQUEST_IMAGE_CAPTURE = 1
     lateinit var imageView:ImageView
     var mDefaultLocation : LatLng? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        homeViewModel =
-            ViewModelProviders.of(this).get(MapViewModel::class.java)
+        inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle? ): View? {
+
+        homeViewModel = ViewModelProviders.of(this).get(MapViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val fab: FloatingActionButton = root.findViewById(R.id.fab)
         fab1 = root.findViewById(R.id.fab1)
@@ -92,14 +88,16 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 //        homeViewModel.text.observe(this, Observer {
 //            textView.text = it
 //        })
+        imageView.setOnClickListener{
+            val act =  activity as MainActivity
+            act.getPermission(Manifest.permission.ACCESS_FINE_LOCATION,act.PERMISSIONS_READ_LOCATION)
+            Log.i("map", "${act.isGranted}")
+        }
 
         return root
     }
 
     override fun onMapReady(p0: GoogleMap?) {
-
-
-
 
         if (p0 != null) {
             mGoogleMap = p0
@@ -187,17 +185,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         background.draw(canvas)
         vectorDrawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
-    }
-
-    private fun dispatchTakePictureIntent() {
-
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            activity?.packageManager?.let {
-                takePictureIntent.resolveActivity(it)?.also {
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-                }
-            }
-        }
     }
 
     fun mooveToLatLng(lat:Double, long:Double){

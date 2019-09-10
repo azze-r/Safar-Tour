@@ -17,12 +17,8 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class MediaFormFragment : BaseFragment() {
-    override fun action() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     private lateinit var viewModel: MediaFormViewModel
-
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle? ): View? {
 
