@@ -9,13 +9,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import com.bolo.bolomap.R
+import com.bolo.bolomap.utils.BaseFragment
 import kotlinx.android.synthetic.main.media_form_fragment.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class MediaFormFragment : Fragment() {
+class MediaFormFragment : BaseFragment() {
+    override fun action() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private lateinit var viewModel: MediaFormViewModel
 

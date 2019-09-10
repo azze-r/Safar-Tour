@@ -9,8 +9,10 @@ import androidx.core.content.ContextCompat
 abstract class BaseActivity: AppCompatActivity() {
 
     val PERMISSIONS_WRITE_EXTERNAL_STORAGE = 0
+    var isGranted = false
 
-    fun getPermission(manifestPermission: String, permission: Int) {
+    fun getPermission(manifestPermission: String, permission: Int):Boolean {
+        isGranted = false
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this, manifestPermission)
             != PackageManager.PERMISSION_GRANTED) {
@@ -30,9 +32,14 @@ abstract class BaseActivity: AppCompatActivity() {
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
-        } else {
-            // Permission has already been granted
         }
+
+        else {
+            isGranted = true
+            onPermissionGranted(permission)
+        }
+
+        return isGranted
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -41,6 +48,8 @@ abstract class BaseActivity: AppCompatActivity() {
             PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
                 // If request is cancelled, the result arrays are empty.
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    isGranted = true
+                    onPermissionGranted(PERMISSIONS_WRITE_EXTERNAL_STORAGE)
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                 } else {
@@ -57,5 +66,7 @@ abstract class BaseActivity: AppCompatActivity() {
             }
         }
     }
+
+    abstract fun onPermissionGranted(permission: Int)
 
 }
