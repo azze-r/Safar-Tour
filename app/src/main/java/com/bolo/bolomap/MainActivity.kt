@@ -1,17 +1,21 @@
 package com.bolo.bolomap
 
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bolo.bolomap.db.dao.MediaDao
 import com.bolo.bolomap.db.entities.Media
+import com.bolo.bolomap.utils.BaseActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     var mediaDao:MediaDao? = null
+    val REQUEST_IMAGE_CAPTURE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +34,16 @@ class MainActivity : AppCompatActivity() {
 
         val array = ArrayList<Media>()
         array.add(media)
-
 //        mediaDao!!.insertAll(media)
 //        insert(media)
+    }
 
-
+    override fun onPermissionGranted(permission: Int) {
+        when (permission) {
+            PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
+                dispatchTakePictureIntent()
+            }
+        }
     }
 
     fun insert(media: Media) {
@@ -47,6 +56,16 @@ class MainActivity : AppCompatActivity() {
         override fun doInBackground(vararg params: Media): Void? {
             mAsyncTaskDao.insertAll(params[0])
             return null
+        }
+    }
+    private fun dispatchTakePictureIntent() {
+
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            this.packageManager?.let {
+                takePictureIntent.resolveActivity(it)?.also {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                }
+            }
         }
     }
 

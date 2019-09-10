@@ -1,11 +1,13 @@
 package com.bolo.bolomap.ui.map
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +17,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.bolo.bolomap.MainActivity
 import com.bolo.bolomap.R
 import com.bolo.bolomap.utils.ImageUtils
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -23,9 +26,10 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_home.*
-
+import com.bolo.bolomap.utils.BaseFragment
 
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+
 
     private lateinit var homeViewModel: MapViewModel
     private lateinit var mGoogleMap: GoogleMap
@@ -66,7 +70,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
 
         fab2.setOnClickListener {
-            dispatchTakePictureIntent()
+            val act = activity as MainActivity
+            act.getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,act.PERMISSIONS_WRITE_EXTERNAL_STORAGE)
         }
 
         mMapView!!.onCreate(savedInstanceState)
