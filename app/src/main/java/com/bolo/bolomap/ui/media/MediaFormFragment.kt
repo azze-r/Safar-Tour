@@ -19,10 +19,9 @@ class MediaFormFragment : Fragment() {
 
     private lateinit var viewModel: MediaFormViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?,
+                               savedInstanceState: Bundle? ): View? {
+
         return inflater.inflate(R.layout.media_form_fragment, container, false)
     }
 

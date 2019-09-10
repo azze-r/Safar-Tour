@@ -27,10 +27,11 @@ import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_home.*
 import android.net.Uri
+import com.bolo.bolomap.utils.BaseFragment
 import java.io.ByteArrayOutputStream
 
 
-class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private lateinit var homeViewModel: MapViewModel
     private lateinit var mGoogleMap: GoogleMap

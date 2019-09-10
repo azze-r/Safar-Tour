@@ -8,8 +8,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bolo.bolomap.db.dao.MediaDao
 import com.bolo.bolomap.db.entities.Media
+import com.bolo.bolomap.utils.BaseActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     var mediaDao:MediaDao? = null
 
@@ -30,7 +31,6 @@ class MainActivity : AppCompatActivity() {
 
         val array = ArrayList<Media>()
         array.add(media)
-
 //        mediaDao!!.insertAll(media)
 //        insert(media)
 
