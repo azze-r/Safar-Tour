@@ -138,7 +138,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        map:srcCompat="@android:drawable/ic_menu_mylocation" />
+        android:background="@android:drawable/ic_menu_mylocation" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

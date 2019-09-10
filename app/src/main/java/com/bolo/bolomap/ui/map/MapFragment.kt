@@ -2,23 +2,22 @@ package com.bolo.bolomap.ui.map
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.bolo.bolomap.MainActivity
 import com.bolo.bolomap.R
+import com.bolo.bolomap.utils.BaseFragment
 import com.bolo.bolomap.utils.ImageUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -26,7 +25,6 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_home.*
-import com.bolo.bolomap.utils.BaseFragment
 
 class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -88,11 +86,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 //        homeViewModel.text.observe(this, Observer {
 //            textView.text = it
 //        })
-        imageView.setOnClickListener{
-            val act =  activity as MainActivity
-            act.getPermission(Manifest.permission.ACCESS_FINE_LOCATION,act.PERMISSIONS_READ_LOCATION)
-            Log.i("map", "${act.isGranted}")
-        }
 
         return root
     }
@@ -128,7 +121,9 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
 
             imageView.setOnClickListener {
-                // Get location
+                val act =  activity as MainActivity
+                act.getPermission(Manifest.permission.ACCESS_FINE_LOCATION,act.PERMISSIONS_READ_LOCATION)
+                Log.i("mapfrag", "${act.isGranted}")
             }
         }
 

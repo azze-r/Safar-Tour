@@ -61,7 +61,6 @@ abstract class BaseActivity: AppCompatActivity() {
             } PERMISSIONS_READ_LOCATION -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     isGranted = true
-                    onPermissionGranted(PERMISSIONS_WRITE_EXTERNAL_STORAGE)
                 } else { }
                 return
             }
