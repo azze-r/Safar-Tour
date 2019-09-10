@@ -17,13 +17,54 @@
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" >
         <action
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
             android:id="@+id/action_navigation_dashboard_to_navigation_media_form"
             app:destination="@id/navigation_media_form" />
+
+        <action
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            android:id="@+id/action_navigation_dashboard_to_navigation_diapo"
+            app:destination="@id/navigation_diapo" />
     </fragment>
+
     <fragment
         android:id="@+id/navigation_media_form"
         android:name="com.bolo.bolomap.ui.media.MediaFormFragment"
         android:label="@string/media_form"
         tools:layout="@layout/media_form_fragment" />
+
+    <fragment
+        android:id="@+id/navigation_diapo"
+        android:name="com.bolo.bolomap.ui.diapoarama.DiapoFragment"
+        android:label="Display Diapo"
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            android:id="@+id/action_navigation_diapo_to_navigation_detail"
+            app:destination="@id/navigation_detail">
+        <argument
+            android:name="pic"
+            app:argType="string" />
+        </action>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_detail"
+        android:name="com.bolo.bolomap.ui.detailsDiapo.DetailFragment"
+        android:label="Details Diapo"
+        tools:layout="@layout/fragment_detail_diapo" >
+        <argument android:name="userName"
+            android:defaultValue= "https://mcdaniel.hu/wp-content/uploads/2015/02/globe-map-suitcase-travel-1176x445.jpg"/>
+    </fragment>
 
 </navigation>

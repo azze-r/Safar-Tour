@@ -1,7 +1,6 @@
-package com.bolo.bolomap.ui.travelog
+package com.bolo.bolomap.ui.diapoarama
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +9,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bolo.bolomap.R
 import com.bolo.bolomap.db.entities.Media
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.bolo.bolomap.ui.travelog.TravelogViewModel
 import kotlin.random.Random
 
-class TravelogFragment : Fragment() {
+class DiapoFragment : Fragment() {
 
     private lateinit var travelogViewModel: TravelogViewModel
 
@@ -27,9 +27,7 @@ class TravelogFragment : Fragment() {
         travelogViewModel =
             ViewModelProviders.of(this).get(TravelogViewModel::class.java)
 
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-
-        val fab: FloatingActionButton = root.findViewById(R.id.fab)
+        val root = inflater.inflate(R.layout.fragment_all_diapo, container, false)
         val localRecycler:RecyclerView = root.findViewById(R.id.myrecycler)
 
         val photos0 = "https://s3.amazonaws.com/ceblog/wp-content/uploads/2012/05/20172622/ce-travel.jpg"
@@ -51,21 +49,18 @@ class TravelogFragment : Fragment() {
         arrayMedias.add(media3)
         arrayMedias.add(media4)
 
-        Log.i("tryhard","recycler is not null")
-        localRecycler.adapter = TraveLogAdapter(this,arrayMedias)
-        localRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
-        fab.setOnClickListener {
-            it.findNavController().navigate(R.id.action_navigation_dashboard_to_navigation_media_form)
-        }
+        localRecycler.adapter = DiapoAdapter(this,arrayMedias + arrayMedias + arrayMedias
+                + arrayMedias+arrayMedias+arrayMedias+arrayMedias+arrayMedias+arrayMedias
+                +arrayMedias+arrayMedias+arrayMedias+arrayMedias+arrayMedias
+                +arrayMedias+arrayMedias+arrayMedias+arrayMedias+arrayMedias)
+        localRecycler.layoutManager = StaggeredGridLayoutManager(3, LinearLayoutManager.VERTICAL)
 
         return root
     }
 
-    fun navDiapo(){
-        view?.findNavController()?.navigate(R.id.action_navigation_dashboard_to_navigation_diapo)
+    fun navDetails(bundle: Bundle) {
+        view?.findNavController()?.navigate(R.id.action_navigation_diapo_to_navigation_detail,bundle)
     }
-
 
 
 }
