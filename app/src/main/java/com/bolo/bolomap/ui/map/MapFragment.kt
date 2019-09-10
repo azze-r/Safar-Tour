@@ -13,7 +13,6 @@ import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.bolo.bolomap.R
 import com.bolo.bolomap.utils.ImageUtils
@@ -23,13 +22,7 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_home.*
-<<<<<<< HEAD
-import android.net.Uri
 import com.bolo.bolomap.utils.BaseFragment
-import java.io.ByteArrayOutputStream
-=======
->>>>>>> origin/master
-
 
 class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
