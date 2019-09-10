@@ -1,6 +1,5 @@
 package com.bolo.bolomap.utils
 
-import android.Manifest
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat

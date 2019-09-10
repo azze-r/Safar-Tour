@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -48,6 +49,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         homeViewModel = ViewModelProviders.of(this).get(MapViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val fab: FloatingActionButton = root.findViewById(R.id.fab)
+        //mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!)
         fab1 = root.findViewById(R.id.fab1)
         fab2 = root.findViewById(R.id.fab2)
         fab3 = root.findViewById(R.id.fab3)
@@ -122,8 +124,13 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
             imageView.setOnClickListener {
                 val act =  activity as MainActivity
-                act.getPermission(Manifest.permission.ACCESS_FINE_LOCATION,act.PERMISSIONS_READ_LOCATION)
-                Log.i("mapfrag", "${act.isGranted}")
+                if (act.getPermission(Manifest.permission.ACCESS_FINE_LOCATION,act.PERMISSIONS_READ_LOCATION)){
+                    mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location : Location? ->
+                        // Got last known location. In some rare situations this can be null.
+                        location?.longitude?.let { it1 -> mooveToLatLng(it1, location.latitude) }
+                    }
+                }
+
             }
         }
 
