@@ -8,7 +8,7 @@ import kotlin.collections.ArrayList
 
 @Entity(tableName = "media")
 data class Media (
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "date") val date: String?,
     @ColumnInfo(name = "label") val label: String?,
     @ColumnInfo(name = "long") val long: Float?,

@@ -36,11 +36,11 @@ class DiapoFragment : Fragment() {
         val photos3 = "https://www.backpackerguide.nz/wp-content/uploads/2017/10/new-zealand-1882703_1280.jpg"
         val photos4 = "https://www.abc.net.au/cm/rimage/10900134-16x9-xlarge.jpg?v=2"
 
-        val media0 = Media(Random.nextInt(),null,"label1",null,null,photos0,null)
-        val media1 = Media(Random.nextInt(),null,"label1",null,null,photos1,null)
-        val media2 = Media(Random.nextInt(),null,"label1",null,null,photos2,null)
-        val media3 = Media(Random.nextInt(),null,"label1",null,null,photos3,null)
-        val media4 = Media(Random.nextInt(),null,"label1",null,null,photos4,null)
+        val media0 = Media(0,null,"label1",null,null,photos0,null)
+        val media1 = Media(0,null,"label1",null,null,photos1,null)
+        val media2 = Media(0,null,"label1",null,null,photos2,null)
+        val media3 = Media(0,null,"label1",null,null,photos3,null)
+        val media4 = Media(0,null,"label1",null,null,photos4,null)
 
         val arrayMedias = ArrayList<Media>()
         arrayMedias.add(media0)
