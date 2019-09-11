@@ -65,6 +65,9 @@
         tools:layout="@layout/fragment_detail_diapo" >
         <argument android:name="userName"
             android:defaultValue= "https://mcdaniel.hu/wp-content/uploads/2015/02/globe-map-suitcase-travel-1176x445.jpg"/>
+        <action
+            android:id="@+id/action_navigation_detail_self"
+            app:destination="@id/navigation_detail" />
     </fragment>
 
 </navigation>
