@@ -1,21 +1,31 @@
 package com.bolo.bolomap
 
 import android.content.Intent
+import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import androidx.cardview.widget.CardView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bolo.bolomap.db.dao.MediaDao
 import com.bolo.bolomap.db.entities.Media
 import com.bolo.bolomap.utils.BaseActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 
 class MainActivity : BaseActivity() {
 
     var mediaDao:MediaDao? = null
-    val REQUEST_IMAGE_CAPTURE = 1
+    lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
+    lateinit var mGoogleMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +41,7 @@ class MainActivity : BaseActivity() {
         val database = RoomDatabase.getDatabase(this)
 
         mediaDao = database.mediaDao()
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         val array = ArrayList<Media>()
         array.add(media)
@@ -40,8 +51,15 @@ class MainActivity : BaseActivity() {
 
     override fun onPermissionGranted(permission: Int) {
         when (permission) {
-            PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
+            Companion.PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
                 dispatchTakePictureIntent()
+            }
+            PERMISSIONS_READ_LOCATION -> {
+                mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+                    // Got last known location. In some rare situations this can be null.
+                    location?.longitude?.let { it1 -> mooveToLatLng(location.latitude, it1) }
+                }
+
             }
         }
     }
@@ -67,6 +85,13 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+    }
+    fun mooveToLatLng(lat:Double, long:Double){
+        mGoogleMap.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(lat, long),
+                12.0f
+            ))
     }
 
 }
