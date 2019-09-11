@@ -19,7 +19,6 @@ import java.util.*
 class MediaFormFragment : BaseFragment() {
 
     private lateinit var viewModel: MediaFormViewModel
-
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?,
                                savedInstanceState: Bundle? ): View? {
 

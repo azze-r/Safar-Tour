@@ -1,6 +1,5 @@
 package com.bolo.bolomap.utils
 
-import android.Manifest
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -9,6 +8,7 @@ import androidx.core.content.ContextCompat
 abstract class BaseActivity: AppCompatActivity() {
 
     val PERMISSIONS_WRITE_EXTERNAL_STORAGE = 0
+    val PERMISSIONS_READ_LOCATION = 1
     var isGranted = false
 
     fun getPermission(manifestPermission: String, permission: Int):Boolean {
@@ -56,6 +56,11 @@ abstract class BaseActivity: AppCompatActivity() {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
+                return
+            } PERMISSIONS_READ_LOCATION -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    isGranted = true
+                } else { }
                 return
             }
 
