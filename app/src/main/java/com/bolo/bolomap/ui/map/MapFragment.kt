@@ -127,7 +127,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 if (act.getPermission(Manifest.permission.ACCESS_FINE_LOCATION,act.PERMISSIONS_READ_LOCATION)){
                     mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location : Location? ->
                         // Got last known location. In some rare situations this can be null.
-                        location?.longitude?.let { it1 -> mooveToLatLng(it1, location.latitude) }
+                        location?.longitude?.let { it1 -> mooveToLatLng(location.latitude,it1 ) }
                     }
                 }
 
