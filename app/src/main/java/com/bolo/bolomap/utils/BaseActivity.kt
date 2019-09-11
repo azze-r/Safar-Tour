@@ -7,8 +7,12 @@ import androidx.core.content.ContextCompat
 
 abstract class BaseActivity: AppCompatActivity() {
 
-    val PERMISSIONS_WRITE_EXTERNAL_STORAGE = 0
-    val PERMISSIONS_READ_LOCATION = 1
+    companion object {
+        const val PERMISSIONS_WRITE_EXTERNAL_STORAGE = 0
+        const val PERMISSIONS_READ_LOCATION = 1
+        const val REQUEST_IMAGE_CAPTURE = 1
+    }
+
     var isGranted = false
 
     fun getPermission(manifestPermission: String, permission: Int):Boolean {
@@ -60,6 +64,7 @@ abstract class BaseActivity: AppCompatActivity() {
             } PERMISSIONS_READ_LOCATION -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     isGranted = true
+                    onPermissionGranted(PERMISSIONS_READ_LOCATION)
                 } else { }
                 return
             }

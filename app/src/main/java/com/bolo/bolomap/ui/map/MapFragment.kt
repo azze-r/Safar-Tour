@@ -18,6 +18,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.bolo.bolomap.MainActivity
 import com.bolo.bolomap.R
+import com.bolo.bolomap.utils.BaseActivity
+import com.bolo.bolomap.utils.BaseActivity.Companion.PERMISSIONS_READ_LOCATION
 import com.bolo.bolomap.utils.BaseFragment
 import com.bolo.bolomap.utils.ImageUtils
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -31,11 +33,11 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
 
     private lateinit var homeViewModel: MapViewModel
-    private lateinit var mGoogleMap: GoogleMap
+
     var myMarker: Marker? = null
     var mMapView: MapView? = null
     var myconstraint: CardView? = null
-    private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
+
     lateinit var fab1: FloatingActionButton
     lateinit var fab2: FloatingActionButton
     lateinit var fab3: FloatingActionButton
@@ -49,7 +51,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         homeViewModel = ViewModelProviders.of(this).get(MapViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val fab: FloatingActionButton = root.findViewById(R.id.fab)
-        //mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!)
         fab1 = root.findViewById(R.id.fab1)
         fab2 = root.findViewById(R.id.fab2)
         fab3 = root.findViewById(R.id.fab3)
@@ -67,15 +68,13 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         fab2.setOnClickListener {
             val act = activity as MainActivity
-            act.getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,act.PERMISSIONS_WRITE_EXTERNAL_STORAGE)
+            act.getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, BaseActivity.PERMISSIONS_WRITE_EXTERNAL_STORAGE)
         }
 
         mMapView!!.onCreate(savedInstanceState)
         mMapView!!.onResume()
 
-        this.let { mFusedLocationProviderClient =
-            activity?.let { it1 -> LocationServices.getFusedLocationProviderClient(it1) }!!
-        }
+
 
         try {
             MapsInitializer.initialize(activity!!.applicationContext)
@@ -93,22 +92,23 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     }
 
     override fun onMapReady(p0: GoogleMap?) {
+        val act =  activity as MainActivity
 
         if (p0 != null) {
-            mGoogleMap = p0
-            mGoogleMap.setOnMarkerClickListener(this)
+            act.mGoogleMap = p0
+            act.mGoogleMap.setOnMarkerClickListener(this)
 
             val drawable = R.drawable.ic_home_black_24dp
             val icon = BitmapDescriptorFactory.fromResource(drawable)
 
-            myMarker = mGoogleMap.addMarker(
+            myMarker = act.mGoogleMap.addMarker(
                 MarkerOptions()
                     .icon(context?.let { bitmapDescriptorFromVector(it, R.drawable.ic_notifications_black_24dp) })
                     .position(
                         LatLng(43.6329,6.9991)
                     ))
 
-            myMarker = mGoogleMap.addMarker(
+            myMarker = act.mGoogleMap.addMarker(
                 MarkerOptions()
                     .icon(context?.let { bitmapDescriptorFromVector(it, R.drawable.ic_notifications_black_24dp) })
                     .position(
@@ -116,21 +116,14 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                     ))
 
 
-            mGoogleMap.setOnMapClickListener {
+            act.mGoogleMap.setOnMapClickListener {
                 myconstraint?.visibility = View.GONE
             }
 
 
 
             imageView.setOnClickListener {
-                val act =  activity as MainActivity
-                if (act.getPermission(Manifest.permission.ACCESS_FINE_LOCATION,act.PERMISSIONS_READ_LOCATION)){
-                    mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location : Location? ->
-                        // Got last known location. In some rare situations this can be null.
-                        location?.longitude?.let { it1 -> mooveToLatLng(location.latitude,it1 ) }
-                    }
-                }
-
+                act.getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
             }
         }
 
@@ -187,13 +180,5 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         background.draw(canvas)
         vectorDrawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
-    }
-
-    fun mooveToLatLng(lat:Double, long:Double){
-        mGoogleMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(lat, long),
-                12.0f
-            ))
     }
 }
