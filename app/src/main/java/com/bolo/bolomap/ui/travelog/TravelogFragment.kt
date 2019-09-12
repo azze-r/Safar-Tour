@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,13 +41,15 @@ class TravelogFragment : Fragment() {
 
         mediaDao = (activity as MainActivity).getDao()
 
-        localRecycler.adapter = GetMediasAsyncTask(mediaDao!!).execute().get().let {
-            TraveLogAdapter(this, GetMediasAsyncTask(mediaDao!!).execute().get())
-        }
+//        val medias =  GetMediasAsyncTask(mediaDao!!).execute().get()
+
+        mediaDao?.getAllMedias()?.observe(this,Observer<List<Media>> {
+            val medias = it
+            localRecycler.adapter = TraveLogAdapter(this, medias)
+        })
+
 
         localRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
-
 
         fab.setOnClickListener {
             it.findNavController().navigate(R.id.action_navigation_dashboard_to_navigation_media_form)
@@ -58,14 +61,13 @@ class TravelogFragment : Fragment() {
     fun navDiapo(){
         view?.findNavController()?.navigate(R.id.action_navigation_dashboard_to_navigation_diapo)
     }
-
-    class GetMediasAsyncTask internal constructor(private val mAsyncTaskDao: MediaDao) :
-        AsyncTask<Void, Void, List<Media>>() {
-        override fun doInBackground(vararg p0: Void?): List<Media> {
-            return mAsyncTaskDao.getAll()
-        }
-
-    }
+//
+//    class GetMediasAsyncTask internal constructor(private val mAsyncTaskDao: MediaDao) :
+//        AsyncTask<Void, Void, List<Media>>() {
+//        override fun doInBackground(vararg p0: Void?): List<Media> {
+//            return mAsyncTaskDao.getAllMedias()
+//        }
+//    }
     
 
 }

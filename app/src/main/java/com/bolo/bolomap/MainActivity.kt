@@ -98,9 +98,6 @@ class MainActivity : BaseActivity() {
         InsertAsyncTask(mediaDao!!).execute(media)
     }
 
-    fun getMedias(): List<Media>? {
-        return mediaDao?.getAll()
-    }
 
     private class InsertAsyncTask internal constructor(private val mAsyncTaskDao: MediaDao) :
         AsyncTask<Media, Void, Void>() {

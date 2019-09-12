@@ -1,5 +1,6 @@
 package com.bolo.bolomap.db.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -10,7 +11,7 @@ import com.bolo.bolomap.db.entities.Media
 interface MediaDao {
 
     @Query("SELECT * FROM media")
-    fun getAll(): List<Media>
+    fun getAllMedias(): LiveData<List<Media>>
 
     @Query("SELECT * FROM media WHERE id IN (:mediaIds)")
     fun loadAllByIds(mediaIds: IntArray): List<Media>
