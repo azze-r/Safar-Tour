@@ -1,7 +1,9 @@
 package com.bolo.bolomap
 
+
 import android.Manifest
 import android.content.Context
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.location.Location
@@ -10,6 +12,8 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
+import android.location.LocationManager
+import android.provider.Settings
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bolo.bolomap.db.dao.MediaDao
@@ -74,9 +78,12 @@ class MainActivity : BaseActivity() {
                 if (moove) {
                     mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
                         // Got last known location. In some rare situations this can be null.
-                        location?.longitude?.let { it1 -> mooveToLatLng(location.latitude, it1) }
+                        if (!(getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
+                            && !(getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                            alertLocationDisabled()
+                        } else location?.longitude?.let { it1 -> mooveToLatLng(location.latitude, it1) }
+                        fast = false
                     }
-                    fast = false
                 }
 
                 if (fast){
@@ -127,7 +134,6 @@ class MainActivity : BaseActivity() {
             ))
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -137,6 +143,13 @@ class MainActivity : BaseActivity() {
             Toast.makeText(this, tempUri?.let { getRealPathFromURI(it) },Toast.LENGTH_LONG).show()
             photos = tempUri?.let { getRealPathFromURI(it) }.toString()
             getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
+        }  else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if ((getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
+                    && (getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                    location?.longitude?.let { it1 -> mooveToLatLng(location.latitude, it1) }
+                }
+            }
         }
     }
 
@@ -162,7 +175,22 @@ class MainActivity : BaseActivity() {
         return path
     }
 
+    private fun checkLocationProvider() {
+        if (!(getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER))
+            alertLocationDisabled()
+    }
 
-
-
+    fun alertLocationDisabled() {
+        val builder = AlertDialog.Builder(this)
+        builder.setCancelable(true)
+        builder.setTitle("Localisation désactivée")
+        builder.setMessage("Pour utiliser la fonctionnalité vous devez activer la localisation.")
+        builder.setPositiveButton("Activer") { dialog, which ->
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivityForResult(intent, REQUEST_LOCATION_ACTIVATION)
+        }
+        builder.setNegativeButton("Non, merci"){ dialog, which ->}
+        val dialog = builder.create()
+        dialog.show()
+    }
 }

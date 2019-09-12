@@ -10,6 +10,8 @@ abstract class BaseActivity: AppCompatActivity() {
     companion object {
         const val PERMISSIONS_WRITE_EXTERNAL_STORAGE = 0
         const val PERMISSIONS_READ_LOCATION = 1
+
+        const val REQUEST_LOCATION_ACTIVATION = 0
         const val REQUEST_IMAGE_CAPTURE = 1
     }
 
