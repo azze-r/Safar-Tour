@@ -76,7 +76,7 @@ class MainActivity : BaseActivity() {
     override fun onPermissionGranted(permission: Int) {
         when (permission) {
 
-            Companion.PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
+            PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
                 dispatchTakePictureIntent()
             }
 
@@ -103,6 +103,7 @@ class MainActivity : BaseActivity() {
                             setResult(Activity.RESULT_OK, replyIntent)
 //                            insert(Media(0, Calendar.getInstance().time.toString(),
 //                            "no name",location.latitude,it1,photos,null))
+
                         }
                     }
                     moove = false
@@ -191,11 +192,6 @@ class MainActivity : BaseActivity() {
         }
 
         return path
-    }
-
-    private fun checkLocationProvider() {
-        if (!(getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER))
-            alertLocationDisabled()
     }
 
     fun alertLocationDisabled() {
