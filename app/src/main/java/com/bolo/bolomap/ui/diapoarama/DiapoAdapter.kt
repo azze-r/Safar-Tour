@@ -28,7 +28,7 @@ class DiapoAdapter(val fragment: DiapoFragment,val medias: List<Media>) : Recycl
         val media = medias[position]
 
         holder.itemView.apply {
-            ImageUtils.loadImageResize(media.photos, R.drawable.ic_launcher_background, imgPic,context)
+//            ImageUtils.loadImageResize(media.photos, R.drawable.ic_launcher_background, imgPic,context)
             setOnClickListener {
                 val bundle = bundleOf("userName" to media.photos)
 

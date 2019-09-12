@@ -37,7 +37,7 @@ class MainActivity : BaseActivity() {
     var photos = ""
     val newWordActivityRequestCode = 1
     private lateinit var mediaViewModel: MediaViewModel
-
+    var tempUri:Uri? = null
     var mediaDao:MediaDao? = null
     lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     lateinit var mGoogleMap: GoogleMap
@@ -149,7 +149,8 @@ class MainActivity : BaseActivity() {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = intent?.extras?.get("data") as Bitmap
-            val tempUri = getImageUri(this, imageBitmap)
+            tempUri = getImageUri(this, imageBitmap)
+
             Toast.makeText(this, tempUri?.let { getRealPathFromURI(it) },Toast.LENGTH_LONG).show()
             photos = tempUri?.let { getRealPathFromURI(it) }.toString()
             getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
