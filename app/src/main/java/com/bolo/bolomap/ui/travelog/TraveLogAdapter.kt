@@ -31,7 +31,7 @@ class TraveLogAdapter(val fragment: TravelogFragment,val medias: List<Media>) : 
         val media = medias[position]
 
         holder.itemView.apply {
-            var uri = Uri.parse(media.photos)
+            val uri = Uri.parse(media.photos)
             imgPic.setImageURI(uri)
             Log.i("tryhard",media.toString())
             setOnClickListener {
