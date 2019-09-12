@@ -1,5 +1,6 @@
 package com.bolo.bolomap
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -21,9 +22,15 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.ByteArrayOutputStream
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : BaseActivity() {
+
+    var moove = false
+    var fast = false
+    var photos = ""
 
     var mediaDao:MediaDao? = null
     lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
@@ -51,26 +58,51 @@ class MainActivity : BaseActivity() {
 //        insert(media)
     }
 
+    fun getDao(): MediaDao? {
+        val database = RoomDatabase.getDatabase(this)
+        return database.mediaDao()
+    }
+
     override fun onPermissionGranted(permission: Int) {
         when (permission) {
+
             Companion.PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
                 dispatchTakePictureIntent()
             }
+
             PERMISSIONS_READ_LOCATION -> {
-                mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
-                    // Got last known location. In some rare situations this can be null.
-                    location?.longitude?.let { it1 -> mooveToLatLng(location.latitude, it1) }
+                if (moove) {
+                    mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+                        // Got last known location. In some rare situations this can be null.
+                        location?.longitude?.let { it1 -> mooveToLatLng(location.latitude, it1) }
+                    }
+                    fast = false
                 }
 
+                if (fast){
+
+                    mFusedLocationProviderClient.lastLocation.addOnSuccessListener {
+                            location: Location? ->
+                        location?.longitude?.let {
+                                it1 -> insert(Media(0, Calendar.getInstance().time.toString(),
+                            "no name",location.latitude,it1,photos,null))
+                        }
+                    }
+                    moove = false
+                }
             }
         }
     }
 
     fun insert(media: Media) {
-        insertAsyncTask(mediaDao!!).execute(media)
+        InsertAsyncTask(mediaDao!!).execute(media)
     }
 
-    private class insertAsyncTask internal constructor(private val mAsyncTaskDao: MediaDao) :
+    fun getMedias(): List<Media>? {
+        return mediaDao?.getAll()
+    }
+
+    private class InsertAsyncTask internal constructor(private val mAsyncTaskDao: MediaDao) :
         AsyncTask<Media, Void, Void>() {
 
         override fun doInBackground(vararg params: Media): Void? {
@@ -89,6 +121,7 @@ class MainActivity : BaseActivity() {
             }
         }
     }
+
     fun mooveToLatLng(lat:Double, long:Double){
         mGoogleMap.animateCamera(
             CameraUpdateFactory.newLatLngZoom(
@@ -104,10 +137,9 @@ class MainActivity : BaseActivity() {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
             val tempUri = getImageUri(this, imageBitmap)
-//            Toast.makeText(this,tempUri.toString(),Toast.LENGTH_LONG).show()
-//            val media = Media(0, Calendar.getInstance().time.toString(),"no name",)
             Toast.makeText(this, tempUri?.let { getRealPathFromURI(it) },Toast.LENGTH_LONG).show()
-
+            photos = tempUri?.let { getRealPathFromURI(it) }.toString()
+            getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
         }
     }
 

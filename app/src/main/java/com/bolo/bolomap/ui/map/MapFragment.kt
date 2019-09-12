@@ -123,6 +123,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
 
             imageView.setOnClickListener {
+                act.moove = true
                 act.getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
             }
         }

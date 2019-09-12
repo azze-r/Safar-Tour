@@ -11,8 +11,8 @@ data class Media (
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "date") val date: String?,
     @ColumnInfo(name = "label") val label: String?,
-    @ColumnInfo(name = "long") val long: Float?,
-    @ColumnInfo(name = "lat") val lat: Float?,
+    @ColumnInfo(name = "long") val long: Double?,
+    @ColumnInfo(name = "lat") val lat: Double?,
     @ColumnInfo(name = "photos") val photos: String?,
     @ColumnInfo(name = "description") val description: String?
 )
