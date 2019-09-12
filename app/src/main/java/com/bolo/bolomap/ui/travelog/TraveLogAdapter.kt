@@ -29,8 +29,8 @@ class TraveLogAdapter(val fragment: TravelogFragment,val medias: List<Media>) : 
         val media = medias[position]
 
         holder.itemView.apply {
-            Log.i("tryhard",media.toString())
-            ImageUtils.loadImageResize(media.photos, R.drawable.ic_launcher_background, imgPic,context)
+            Log.i("tryhard",media.photos?.substring(1).toString())
+            media.photos?.let { ImageUtils.loadImageResizeLocal(it.substring(1), R.drawable.ic_launcher_background, imgPic,context) }
 
             setOnClickListener {
                 fragment.navDiapo()

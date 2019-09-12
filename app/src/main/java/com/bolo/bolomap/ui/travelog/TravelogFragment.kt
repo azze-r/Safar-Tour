@@ -41,13 +41,11 @@ class TravelogFragment : Fragment() {
 
         mediaDao = (activity as MainActivity).getDao()
 
-//        val medias =  GetMediasAsyncTask(mediaDao!!).execute().get()
-
-        mediaDao?.getAllMedias()?.observe(this,Observer<List<Media>> {
-            val medias = it
-            localRecycler.adapter = TraveLogAdapter(this, medias)
-        })
-
+        mediaDao!!.getAllMedias().observe(this,
+            Observer {
+                val medias = it
+                localRecycler.adapter = TraveLogAdapter(this, medias)
+            })
 
         localRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 

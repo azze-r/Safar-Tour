@@ -1,6 +1,7 @@
 package com.bolo.bolomap
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -10,10 +11,12 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bolo.bolomap.db.dao.MediaDao
 import com.bolo.bolomap.db.entities.Media
+import com.bolo.bolomap.ui.map.MapFragment
 import com.bolo.bolomap.utils.BaseActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -31,6 +34,8 @@ class MainActivity : BaseActivity() {
     var moove = false
     var fast = false
     var photos = ""
+    val newWordActivityRequestCode = 1
+    private lateinit var mediaViewModel: MediaViewModel
 
     var mediaDao:MediaDao? = null
     lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
@@ -52,8 +57,12 @@ class MainActivity : BaseActivity() {
         mediaDao = database.mediaDao()
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
+        mediaViewModel = ViewModelProviders.of(this).get(MediaViewModel::class.java)
+
         val array = ArrayList<Media>()
         array.add(media)
+
+
 //        mediaDao!!.insertAll(media)
 //        insert(media)
     }
@@ -84,8 +93,12 @@ class MainActivity : BaseActivity() {
                     mFusedLocationProviderClient.lastLocation.addOnSuccessListener {
                             location: Location? ->
                         location?.longitude?.let {
-                                it1 -> insert(Media(0, Calendar.getInstance().time.toString(),
-                            "no name",location.latitude,it1,photos,null))
+                                it1 ->
+                            val replyIntent = Intent()
+                            replyIntent.putExtra("com.jeluchu.roombbdd.REPLY", photos)
+                            setResult(Activity.RESULT_OK, replyIntent)
+//                            insert(Media(0, Calendar.getInstance().time.toString(),
+//                            "no name",location.latitude,it1,photos,null))
                         }
                     }
                     moove = false
@@ -97,7 +110,6 @@ class MainActivity : BaseActivity() {
     fun insert(media: Media) {
         InsertAsyncTask(mediaDao!!).execute(media)
     }
-
 
     private class InsertAsyncTask internal constructor(private val mAsyncTaskDao: MediaDao) :
         AsyncTask<Media, Void, Void>() {
@@ -128,15 +140,22 @@ class MainActivity : BaseActivity() {
     }
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
+            val imageBitmap = intent?.extras?.get("data") as Bitmap
             val tempUri = getImageUri(this, imageBitmap)
             Toast.makeText(this, tempUri?.let { getRealPathFromURI(it) },Toast.LENGTH_LONG).show()
             photos = tempUri?.let { getRealPathFromURI(it) }.toString()
             getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
+        }
+
+        if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
+            intent?.let { data ->
+                val media = Media(0,null,null,null,null,photos,null)
+                mediaViewModel.insert(media)
+            }
         }
     }
 
@@ -161,6 +180,7 @@ class MainActivity : BaseActivity() {
 
         return path
     }
+
 
 
 

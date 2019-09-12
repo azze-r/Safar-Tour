@@ -7,7 +7,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 @Entity(tableName = "media")
-data class Media (
+class Media (
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "date") val date: String?,
     @ColumnInfo(name = "label") val label: String?,
@@ -16,3 +16,8 @@ data class Media (
     @ColumnInfo(name = "photos") val photos: String?,
     @ColumnInfo(name = "description") val description: String?
 )
+{
+    override fun toString(): String {
+        return "Media(id=$id, date=$date, label=$label, long=$long, lat=$lat, photos=$photos, description=$description)"
+    }
+}

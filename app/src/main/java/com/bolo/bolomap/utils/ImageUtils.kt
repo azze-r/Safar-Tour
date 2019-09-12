@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.request.RequestOptions
 import java.io.ByteArrayOutputStream
+import java.io.File
 import kotlin.math.abs
 
 
@@ -88,6 +89,9 @@ class ImageUtils {
             Glide.with(context).load(uri).apply(RequestOptions().centerCrop().placeholder(holderResId)).into(imageView)
         }
 
+        fun loadImageResizeLocal(uri: String, holderResId: Int, imageView: ImageView, context:Context) {
+            Glide.with(context).load(File(uri)).apply(RequestOptions().centerCrop().placeholder(holderResId)).into(imageView)
+        }
         fun loadImageResource(fragment: Fragment, holderResId: Int, imageView: ImageView) {
             Glide.with(fragment).load(holderResId).apply(RequestOptions().centerCrop()).into(imageView)
         }

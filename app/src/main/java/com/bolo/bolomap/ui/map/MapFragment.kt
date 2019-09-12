@@ -182,4 +182,8 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         vectorDrawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
+
+    companion object {
+        const val EXTRA_REPLY = "com.jeluchu.roombbdd.REPLY"
+    }
 }

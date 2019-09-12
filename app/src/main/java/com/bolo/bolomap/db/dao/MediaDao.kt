@@ -1,10 +1,8 @@
 package com.bolo.bolomap.db.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
+import androidx.room.OnConflictStrategy.REPLACE
 import com.bolo.bolomap.db.entities.Media
 
 @Dao
@@ -22,6 +20,15 @@ interface MediaDao {
     @Insert
     fun insertAll(vararg medias: Media)
 
+    @Insert(onConflict = REPLACE)
+    fun insert(media: Media)
+
+    @Update
+    fun update(media:Media)
+
     @Delete
     fun delete(media: Media)
+
+    @Query("DELETE FROM media")
+    fun deleteAll()
 }
