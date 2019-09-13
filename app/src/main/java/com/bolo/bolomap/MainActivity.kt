@@ -18,9 +18,12 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.bolo.bolomap.db.dao.MediaDao
-import com.bolo.bolomap.db.entities.Media
+import com.bolo.bolomap.db.dao.AlbumDao
+import com.bolo.bolomap.db.dao.PhotoDao
+import com.bolo.bolomap.db.entities.Album
+import com.bolo.bolomap.db.entities.Photo
 import com.bolo.bolomap.utils.BaseActivity
+import com.bolo.bolomap.utils.ImageUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -37,9 +40,10 @@ class MainActivity : BaseActivity() {
     var fast = false
     var photos = ""
     val newWordActivityRequestCode = 1
-    private lateinit var mediaViewModel: MediaViewModel
+    private lateinit var photoViewModel: PhotoViewModel
     var tempUri:Uri? = null
-    var mediaDao:MediaDao? = null
+    var photoDao:PhotoDao? = null
+
     lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     lateinit var mGoogleMap: GoogleMap
 
@@ -52,24 +56,16 @@ class MainActivity : BaseActivity() {
 
         navView.setupWithNavController(navController)
 
-        val media = Media(0,null,null,null,null,null,null)
-
         val database = RoomDatabase.getDatabase(this)
 
-        mediaDao = database.mediaDao()
+        photoDao = database.photoDao()
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        mediaViewModel = ViewModelProviders.of(this).get(MediaViewModel::class.java)
-
-        val array = ArrayList<Media>()
-        array.add(media)
-
-
-//        mediaDao!!.insertAll(media)
-//        insert(media)
+        photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
     }
 
-    fun getDao(): MediaDao? {
+    fun getDao(): AlbumDao? {
         val database = RoomDatabase.getDatabase(this)
         return database.mediaDao()
     }
@@ -82,6 +78,7 @@ class MainActivity : BaseActivity() {
             }
 
             PERMISSIONS_READ_LOCATION -> {
+
                 if (moove) {
                     mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
                         // Got last known location. In some rare situations this can be null.
@@ -102,9 +99,6 @@ class MainActivity : BaseActivity() {
                             val replyIntent = Intent()
                             replyIntent.putExtra("com.jeluchu.roombbdd.REPLY", photos)
                             setResult(Activity.RESULT_OK, replyIntent)
-//                            insert(Media(0, Calendar.getInstance().time.toString(),
-//                            "no name",location.latitude,it1,photos,null))
-
                         }
                     }
                     moove = false
@@ -113,14 +107,14 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    fun insert(media: Media) {
-        InsertAsyncTask(mediaDao!!).execute(media)
+    fun insert(photo: Photo) {
+        InsertAsyncTask(photoDao!!).execute(photo)
     }
 
-    private class InsertAsyncTask internal constructor(private val mAsyncTaskDao: MediaDao) :
-        AsyncTask<Media, Void, Void>() {
+    private class InsertAsyncTask internal constructor(private val mAsyncTaskDao: PhotoDao) :
+        AsyncTask<Photo, Void, Void>() {
 
-        override fun doInBackground(vararg params: Media): Void? {
+        override fun doInBackground(vararg params: Photo): Void? {
             mAsyncTaskDao.insertAll(params[0])
             return null
         }
@@ -145,67 +139,47 @@ class MainActivity : BaseActivity() {
             ))
     }
 
+    fun putPicToLatLng(lat:Double, long:Double){
+
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = intent?.extras?.get("data") as Bitmap
-            tempUri = getImageUri(this, imageBitmap)
 
-            Toast.makeText(this, tempUri?.let { getRealPathFromURI(it) },Toast.LENGTH_LONG).show()
-            photos = tempUri?.let { getRealPathFromURI(it) }.toString()
+            val imageBitmap = intent?.extras?.get("data") as Bitmap
+            tempUri = ImageUtils.getImageUri(this, imageBitmap)
+            Toast.makeText(this, tempUri?.let { ImageUtils.getRealPathFromURI(it,this) },Toast.LENGTH_LONG).show()
+            photos = tempUri?.let { ImageUtils.getRealPathFromURI(it,this) }.toString()
             getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
-        }  else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
+        }
+
+        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
             mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+
                 if ((getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
                     && (getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                    location?.longitude?.let { it1 -> mooveToLatLng(location.latitude, it1) }
+
+                    location?.longitude?.let {
+                            it1 -> mooveToLatLng(location.latitude, it1)
+                    }
                 }
             }
+
         }
 
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
             intent?.let { data ->
-                val media = Media(0,null,null,null,null,photos,null)
-                mediaViewModel.insert(media)
+                val photo = Photo(0,null,null,null,null,photos,null)
+                photoViewModel.insert(photo)
             }
         }
     }
 
-    private fun getImageUri(inContext: Context, inImage:Bitmap): Uri? {
-        val bytes = ByteArrayOutputStream()
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "pic" + Random.nextInt().toString(), null)
-        return Uri.parse(path)
-    }
 
-    private fun getRealPathFromURI(uri:Uri): String {
-        var path = ""
-        if (contentResolver != null) {
-            val cursor = contentResolver!!.query(uri, null, null, null, null)
-            if (cursor != null) {
-                cursor.moveToFirst()
-                val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-                path = cursor.getString(idx)
-                cursor.close()
-            }
-        }
 
-        return path
-    }
 
-    fun alertLocationDisabled() {
-        val builder = AlertDialog.Builder(this)
-        builder.setCancelable(true)
-        builder.setTitle("Localisation désactivée")
-        builder.setMessage("Pour utiliser la fonctionnalité vous devez activer la localisation.")
-        builder.setPositiveButton("Activer") { dialog, which ->
-            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            startActivityForResult(intent, REQUEST_LOCATION_ACTIVATION)
-        }
-        builder.setNegativeButton("Non, merci"){ dialog, which ->}
-        val dialog = builder.create()
-        dialog.show()
-    }
 }

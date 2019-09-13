@@ -2,22 +2,17 @@ package com.bolo.bolomap.ui.travelog
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bolo.bolomap.R
-import com.bolo.bolomap.db.entities.Media
+import com.bolo.bolomap.db.entities.Album
 import com.bolo.bolomap.utils.ImageUtils
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.view_item_list_medias.view.*
-import java.io.File
-import java.net.URI
 
 
-class TraveLogAdapter(val fragment: TravelogFragment,val medias: List<Media>) : RecyclerView.Adapter<TraveLogAdapter.ViewHolder>() {
+class TraveLogAdapter(val fragment: TravelogFragment,val albums: List<Album>) : RecyclerView.Adapter<TraveLogAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layout: Int = R.layout.view_item_list_medias
@@ -25,16 +20,16 @@ class TraveLogAdapter(val fragment: TravelogFragment,val medias: List<Media>) : 
     }
 
     override fun getItemCount(): Int {
-        return medias.size
+        return albums.size
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val media = medias[position]
+        val media = albums[position]
 
         holder.itemView.apply {
-            val realUri = Uri.parse(media.photos)
+            val realUri = Uri.parse(media.photo)
             ImageUtils.loadImageResizeLocal(realUri, R.drawable.ic_launcher_background, imgPic,context)
             setOnClickListener {
                 fragment.navDiapo()

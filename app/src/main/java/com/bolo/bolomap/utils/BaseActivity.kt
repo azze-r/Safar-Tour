@@ -1,6 +1,9 @@
 package com.bolo.bolomap.utils
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -22,21 +25,12 @@ abstract class BaseActivity: AppCompatActivity() {
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this, manifestPermission)
             != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, manifestPermission)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+
             } else {
-                // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this, arrayOf(manifestPermission),
                     permission)
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         }
 
@@ -56,11 +50,7 @@ abstract class BaseActivity: AppCompatActivity() {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     isGranted = true
                     onPermissionGranted(PERMISSIONS_WRITE_EXTERNAL_STORAGE)
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
                 return
             } PERMISSIONS_READ_LOCATION -> {
@@ -71,14 +61,25 @@ abstract class BaseActivity: AppCompatActivity() {
                 return
             }
 
-            // Add other 'when' lines to check for other
-            // permissions this app might request.
             else -> {
-                // Ignore all other requests.
             }
         }
     }
 
     abstract fun onPermissionGranted(permission: Int)
+
+    fun alertLocationDisabled() {
+        val builder = AlertDialog.Builder(this)
+        builder.setCancelable(true)
+        builder.setTitle("Localisation désactivée")
+        builder.setMessage("Pour utiliser la fonctionnalité vous devez activer la localisation.")
+        builder.setPositiveButton("Activer") { dialog, which ->
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivityForResult(intent, REQUEST_LOCATION_ACTIVATION)
+        }
+        builder.setNegativeButton("Non, merci"){ dialog, which ->}
+        val dialog = builder.create()
+        dialog.show()
+    }
 
 }

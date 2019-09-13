@@ -11,9 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bolo.bolomap.R
-import com.bolo.bolomap.db.entities.Media
+import com.bolo.bolomap.db.entities.Album
 import com.bolo.bolomap.ui.travelog.TravelogViewModel
-import kotlin.random.Random
 
 class DiapoFragment : Fragment() {
 
@@ -36,13 +35,13 @@ class DiapoFragment : Fragment() {
         val photos3 = "https://www.backpackerguide.nz/wp-content/uploads/2017/10/new-zealand-1882703_1280.jpg"
         val photos4 = "https://www.abc.net.au/cm/rimage/10900134-16x9-xlarge.jpg?v=2"
 
-        val media0 = Media(0,null,"label1",null,null,photos0,null)
-        val media1 = Media(0,null,"label1",null,null,photos1,null)
-        val media2 = Media(0,null,"label1",null,null,photos2,null)
-        val media3 = Media(0,null,"label1",null,null,photos3,null)
-        val media4 = Media(0,null,"label1",null,null,photos4,null)
+        val media0 = Album(0,null,"label1",null,null,photos0,null)
+        val media1 = Album(0,null,"label1",null,null,photos1,null)
+        val media2 = Album(0,null,"label1",null,null,photos2,null)
+        val media3 = Album(0,null,"label1",null,null,photos3,null)
+        val media4 = Album(0,null,"label1",null,null,photos4,null)
 
-        val arrayMedias = ArrayList<Media>()
+        val arrayMedias = ArrayList<Album>()
         arrayMedias.add(media0)
         arrayMedias.add(media1)
         arrayMedias.add(media2)

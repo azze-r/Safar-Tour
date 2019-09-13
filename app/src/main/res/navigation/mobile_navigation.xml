@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/navigation_media_form"
-        android:name="com.bolo.bolomap.ui.media.MediaFormFragment"
+        android:name="com.bolo.bolomap.ui.album.MediaFormFragment"
         android:label="@string/media_form"
         tools:layout="@layout/media_form_fragment" />
 

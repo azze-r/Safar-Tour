@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -18,6 +19,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.lang.Exception
 import kotlin.math.abs
+import kotlin.random.Random
 
 
 /**
@@ -133,6 +135,31 @@ class ImageUtils {
             return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
         }
 
+
+        fun getImageUri(inContext: Context, inImage:Bitmap): Uri? {
+            val bytes = ByteArrayOutputStream()
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+            val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "pic" + Random.nextInt().toString(), null)
+            return Uri.parse(path)
+        }
+
+        fun getRealPathFromURI(uri:Uri,context: Context): String {
+            var path = ""
+            if (context.contentResolver != null) {
+                val cursor = context.contentResolver!!.query(uri, null, null, null, null)
+                if (cursor != null) {
+                    cursor.moveToFirst()
+                    val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+                    path = cursor.getString(idx)
+                    cursor.close()
+                }
+            }
+
+            return path
+        }
+
     }
+
+
 
 }

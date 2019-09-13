@@ -5,15 +5,18 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 
-import com.bolo.bolomap.db.dao.MediaDao;
-import com.bolo.bolomap.db.entities.Media;
+import com.bolo.bolomap.db.dao.AlbumDao;
+import com.bolo.bolomap.db.dao.PhotoDao;
+import com.bolo.bolomap.db.entities.Album;
+import com.bolo.bolomap.db.entities.Photo;
 
-@Database(entities = {Media.class}, version = 1)
+@Database(entities = {Album.class, Photo.class}, version = 2)
 public abstract class RoomDatabase extends androidx.room.RoomDatabase {
 
-   public abstract MediaDao mediaDao();
+    public abstract AlbumDao mediaDao();
+    public abstract PhotoDao photoDao();
 
-   private static volatile RoomDatabase INSTANCE;
+    private static volatile RoomDatabase INSTANCE;
 
    static RoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
