@@ -5,6 +5,7 @@ import android.graphics.*
 
 import android.net.Uri
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,6 +16,7 @@ import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.request.RequestOptions
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.lang.Exception
 import kotlin.math.abs
 
 
@@ -90,7 +92,13 @@ class ImageUtils {
         }
 
         fun loadImageResizeLocal(uri: Uri, holderResId: Int, imageView: ImageView, context:Context) {
-            Glide.with(context).load(uri).apply(RequestOptions().centerCrop().placeholder(holderResId)).into(imageView)
+            try{
+                val file = File(Uri.decode(uri.path))
+                Glide.with(context).load(file).apply(RequestOptions().centerCrop().placeholder(holderResId)).into(imageView)
+            }
+            catch (e:Exception){
+                Log.i("tryhard",e.toString())
+            }
         }
 
         fun loadImageResource(fragment: Fragment, holderResId: Int, imageView: ImageView) {

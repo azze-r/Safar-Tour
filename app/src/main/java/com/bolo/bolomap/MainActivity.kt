@@ -28,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.ByteArrayOutputStream
+import kotlin.random.Random
 
 
 class MainActivity : BaseActivity() {
@@ -175,7 +176,7 @@ class MainActivity : BaseActivity() {
     private fun getImageUri(inContext: Context, inImage:Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "pic" + Random.nextInt().toString(), null)
         return Uri.parse(path)
     }
 

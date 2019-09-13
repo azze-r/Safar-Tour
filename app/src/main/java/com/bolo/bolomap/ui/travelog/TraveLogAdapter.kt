@@ -7,8 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bolo.bolomap.R
 import com.bolo.bolomap.db.entities.Media
 import com.bolo.bolomap.utils.ImageUtils
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.view_item_list_medias.view.*
 import java.io.File
 import java.net.URI
@@ -17,7 +20,7 @@ import java.net.URI
 class TraveLogAdapter(val fragment: TravelogFragment,val medias: List<Media>) : RecyclerView.Adapter<TraveLogAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layout: Int = com.bolo.bolomap.R.layout.view_item_list_medias
+        val layout: Int = R.layout.view_item_list_medias
         return ViewHolder(LayoutInflater.from(parent.context).inflate(layout, parent, false))
     }
 
@@ -31,9 +34,8 @@ class TraveLogAdapter(val fragment: TravelogFragment,val medias: List<Media>) : 
         val media = medias[position]
 
         holder.itemView.apply {
-            val uri = Uri.parse(media.photos)
-            imgPic.setImageURI(uri)
-            Log.i("tryhard",media.toString())
+            val realUri = Uri.parse(media.photos)
+            ImageUtils.loadImageResizeLocal(realUri, R.drawable.ic_launcher_background, imgPic,context)
             setOnClickListener {
                 fragment.navDiapo()
             }
