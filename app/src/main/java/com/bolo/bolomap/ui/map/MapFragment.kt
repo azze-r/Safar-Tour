@@ -74,8 +74,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         mMapView!!.onCreate(savedInstanceState)
         mMapView!!.onResume()
 
-
-
         try {
             MapsInitializer.initialize(activity!!.applicationContext)
         } catch (e: Throwable) {
@@ -92,9 +90,11 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     }
 
     override fun onMapReady(p0: GoogleMap?) {
+
         val act =  activity as MainActivity
 
         if (p0 != null) {
+
             act.mGoogleMap = p0
             act.mGoogleMap.setOnMarkerClickListener(this)
 
@@ -103,14 +103,14 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
             myMarker = act.mGoogleMap.addMarker(
                 MarkerOptions()
-                    .icon(context?.let { bitmapDescriptorFromVector(it, R.drawable.ic_notifications_black_24dp) })
+                    .icon(context?.let { ImageUtils.bitmapDescriptorFromVector(it, R.drawable.ic_notifications_black_24dp) })
                     .position(
                         LatLng(43.6329,6.9991)
                     ))
 
             myMarker = act.mGoogleMap.addMarker(
                 MarkerOptions()
-                    .icon(context?.let { bitmapDescriptorFromVector(it, R.drawable.ic_notifications_black_24dp) })
+                    .icon(context?.let { ImageUtils.bitmapDescriptorFromVector(it, R.drawable.ic_notifications_black_24dp) })
                     .position(
                         LatLng(48.210033,16.363449)
                     ))
@@ -165,26 +165,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         fab3.animate().translationY(0F)
     }
 
-    private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor {
-        val background = ContextCompat.getDrawable(context, R.drawable.ic_notifications_black_24dp)
-        background!!.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
-        val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
-        vectorDrawable!!.setBounds(
-            40,
-            20,
-            vectorDrawable.intrinsicWidth + 40,
-            vectorDrawable.intrinsicHeight + 20
-        )
-        val bitmap = Bitmap.createBitmap(
-            background.intrinsicWidth,
-            background.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        background.draw(canvas)
-        vectorDrawable.draw(canvas)
-        return BitmapDescriptorFactory.fromBitmap(bitmap)
-    }
+
 
     companion object {
         const val EXTRA_REPLY = "com.jeluchu.roombbdd.REPLY"

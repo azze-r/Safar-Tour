@@ -10,11 +10,16 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.bolo.bolomap.R
 import com.bumptech.glide.GenericTransitionOptions
 import com.bumptech.glide.Glide
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.lang.Exception
@@ -156,6 +161,27 @@ class ImageUtils {
             }
 
             return path
+        }
+
+        fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor {
+            val background = ContextCompat.getDrawable(context, R.drawable.ic_notifications_black_24dp)
+            background!!.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
+            val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
+            vectorDrawable!!.setBounds(
+                40,
+                20,
+                vectorDrawable.intrinsicWidth + 40,
+                vectorDrawable.intrinsicHeight + 20
+            )
+            val bitmap = Bitmap.createBitmap(
+                background.intrinsicWidth,
+                background.intrinsicHeight,
+                Bitmap.Config.ARGB_8888
+            )
+            val canvas = Canvas(bitmap)
+            background.draw(canvas)
+            vectorDrawable.draw(canvas)
+            return BitmapDescriptorFactory.fromBitmap(bitmap)
         }
 
     }

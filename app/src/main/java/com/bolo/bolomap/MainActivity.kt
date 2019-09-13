@@ -14,6 +14,7 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
@@ -29,6 +30,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.ByteArrayOutputStream
 import kotlin.random.Random
@@ -38,6 +40,9 @@ class MainActivity : BaseActivity() {
 
     var moove = false
     var fast = false
+    var long = 0.0
+    var lat = 0.0
+
     var photos = ""
     val newWordActivityRequestCode = 1
     private lateinit var photoViewModel: PhotoViewModel
@@ -74,7 +79,7 @@ class MainActivity : BaseActivity() {
         when (permission) {
 
             PERMISSIONS_WRITE_EXTERNAL_STORAGE -> {
-                dispatchTakePictureIntent()
+                getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
             }
 
             PERMISSIONS_READ_LOCATION -> {
@@ -85,20 +90,26 @@ class MainActivity : BaseActivity() {
                         if (!(getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
                             && !(getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                             alertLocationDisabled()
-                        } else location?.longitude?.let { it1 -> mooveToLatLng(location.latitude, it1) }
+                        }
+                        else location?.longitude?.let { it1 ->
+                            mooveToLatLng(location.latitude, it1)
+                        }
                         fast = false
                     }
                 }
 
-                if (fast){
+                else{
 
                     mFusedLocationProviderClient.lastLocation.addOnSuccessListener {
                             location: Location? ->
                         location?.longitude?.let {
                                 it1 ->
                             val replyIntent = Intent()
+                            long = it1
+                            lat = location.latitude
                             replyIntent.putExtra("com.jeluchu.roombbdd.REPLY", photos)
                             setResult(Activity.RESULT_OK, replyIntent)
+                            dispatchTakePictureIntent()
                         }
                     }
                     moove = false
@@ -132,15 +143,25 @@ class MainActivity : BaseActivity() {
     }
 
     fun mooveToLatLng(lat:Double, long:Double){
-        mGoogleMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(lat, long),
-                12.0f
-            ))
+        if (mGoogleMap != null) {
+
+            mGoogleMap.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(lat, long),
+                    12.0f
+                )
+            )
+        }
     }
 
-    fun putPicToLatLng(lat:Double, long:Double){
 
+    fun putPicToLatLng(lat:Double, long:Double){
+        mGoogleMap.addMarker(
+            MarkerOptions()
+                .icon(this.let { ImageUtils.bitmapDescriptorFromVector(it, R.mipmap.ic_launcher_travel_rounded) })
+                .position(
+                    LatLng(lat,long)
+                ))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -152,11 +173,15 @@ class MainActivity : BaseActivity() {
             tempUri = ImageUtils.getImageUri(this, imageBitmap)
             Toast.makeText(this, tempUri?.let { ImageUtils.getRealPathFromURI(it,this) },Toast.LENGTH_LONG).show()
             photos = tempUri?.let { ImageUtils.getRealPathFromURI(it,this) }.toString()
-            getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
+//            getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
+            val photo = Photo(0,null,null,long,lat,photos,null)
+            photoViewModel.insert(photo)
+            Log.i("tryhard",photo.toString())
 
+            putPicToLatLng(lat,long)
         }
 
-        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        else if (requestCode == REQUEST_LOCATION_ACTIVATION && resultCode == RESULT_OK) {
 
             mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
 
@@ -171,14 +196,12 @@ class MainActivity : BaseActivity() {
 
         }
 
-        if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
-            intent?.let { data ->
-                val photo = Photo(0,null,null,null,null,photos,null)
-                photoViewModel.insert(photo)
-            }
+//        else if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
+//
+//            intent?.let { data ->
+//
+//            }
         }
-    }
-
 
 
 
