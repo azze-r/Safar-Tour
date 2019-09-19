@@ -1,6 +1,7 @@
 package com.bolo.bolomap.ui.travelog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bolo.bolomap.MainActivity
 import com.bolo.bolomap.R
 import com.bolo.bolomap.db.dao.AlbumDao
+import com.bolo.bolomap.db.entities.Album
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class TravelogFragment : Fragment() {
 
     private lateinit var travelogViewModel: TravelogViewModel
-    var mediaDao: AlbumDao? = null
+    var albumDao: AlbumDao? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,12 +35,28 @@ class TravelogFragment : Fragment() {
         val fab: FloatingActionButton = root.findViewById(R.id.fab)
         val localRecycler:RecyclerView = root.findViewById(R.id.myrecycler)
 
-        mediaDao = (activity as MainActivity).getDao()
+        albumDao = (activity as MainActivity).getDao()
 
-        mediaDao!!.getAllAlbums().observe(this,
+        albumDao!!.getAllAlbums().observe(this,
             Observer {
-                val medias = it
-                localRecycler.adapter = TraveLogAdapter(this, medias)
+                var albums = it
+                if (albums.isEmpty()){
+                    val album1 = Album(0,null,"album 1",null,null,"https://images.unsplash.com/photo-1558981852-426c6c22a060?ixlib=rb-1.2.1&w=1000&q=80",null)
+                    val album2 = Album(0,null,"album 1",null,null,"https://img4.goodfon.com/wallpaper/nbig/a/af/mountains-clouds-travel-wallpaper-background-priroda-peizazh.jpg",null)
+                    val fakeAlbum = ArrayList<Album>()
+                    fakeAlbum.add(album1)
+                    fakeAlbum.add(album1)
+                    fakeAlbum.add(album2)
+                    fakeAlbum.add(album1)
+                    fakeAlbum.add(album1)
+                    fakeAlbum.add(album1)
+                    albums = fakeAlbum
+                }
+                else {
+                    Log.i("tryhard", albums.size.toString())
+                }
+
+                localRecycler.adapter = TraveLogAdapter(this, albums)
             })
 
         localRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)

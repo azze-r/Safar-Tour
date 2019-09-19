@@ -1,8 +1,7 @@
-package com.bolo.bolomap.ui.media
+package com.bolo.bolomap.ui.form
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,6 @@ import com.bolo.bolomap.R
 import com.bolo.bolomap.utils.BaseFragment
 import kotlinx.android.synthetic.main.media_form_fragment.*
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class MediaFormFragment : BaseFragment() {

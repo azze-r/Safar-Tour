@@ -1,4 +1,4 @@
-package com.bolo.bolomap.ui.media
+package com.bolo.bolomap.ui.form
 
 import android.app.DatePickerDialog
 import android.app.Dialog

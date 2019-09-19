@@ -30,7 +30,8 @@ class TraveLogAdapter(val fragment: TravelogFragment,val albums: List<Album>) : 
 
         holder.itemView.apply {
             val realUri = Uri.parse(media.photo)
-            ImageUtils.loadImageResizeLocal(realUri, R.drawable.ic_launcher_background, imgPic,context)
+            ImageUtils.loadImageResize(media.photo,R.drawable.ic_launcher_background,imgPic,context)
+//            ImageUtils.loadImageResizeLocal(realUri, R.drawable.ic_launcher_background, imgPic,context)
             setOnClickListener {
                 fragment.navDiapo()
             }
