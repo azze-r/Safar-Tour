@@ -1,9 +1,8 @@
-package com.bolo.bolomap
+package com.bolo.bolomap.db.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.bolo.bolomap.db.entities.Album
 import com.bolo.bolomap.db.entities.Photo
 import com.bolo.bolomap.db.repository.PhotoRepository
 import kotlinx.coroutines.CoroutineScope

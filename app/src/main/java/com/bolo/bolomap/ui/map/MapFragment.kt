@@ -1,16 +1,21 @@
 package com.bolo.bolomap.ui.map
 
 import android.Manifest
+import android.app.Activity
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProviders
-import com.bolo.bolomap.MainActivity
 import com.bolo.bolomap.R
-import com.bolo.bolomap.utils.BaseActivity
+import com.bolo.bolomap.db.entities.Photo
+import com.bolo.bolomap.db.viewmodel.MainActivity
 import com.bolo.bolomap.utils.BaseActivity.Companion.PERMISSIONS_READ_LOCATION
 import com.bolo.bolomap.utils.BaseFragment
 import com.bolo.bolomap.utils.ImageUtils
@@ -22,8 +27,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_home.*
+
 
 class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -31,41 +36,60 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     private lateinit var homeViewModel: MapViewModel
 
     var myMarker: Marker? = null
+    var imageSave: ImageView? = null
+    var imageAdd: ImageView? = null
+    var cardAlbum: CardView? = null
+    var uri: Uri? = null
+    var path: String? = null
+
+    var long: Double = 0.0
+    var lat: Double = 0.0
     var mMapView: MapView? = null
     var myconstraint: CardView? = null
 
-    lateinit var fab1: FloatingActionButton
-    lateinit var fab2: FloatingActionButton
-    lateinit var fab3: FloatingActionButton
-    var isFABOpen = false
-    lateinit var imageView:ImageView
-    var mDefaultLocation : LatLng? = null
+    lateinit var imageView: ImageView
+    var mDefaultLocation: LatLng? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle? ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
 
         homeViewModel = ViewModelProviders.of(this).get(MapViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val fab: FloatingActionButton = root.findViewById(R.id.fab)
-        fab1 = root.findViewById(R.id.fab1)
-        fab2 = root.findViewById(R.id.fab2)
-        fab3 = root.findViewById(R.id.fab3)
+
+        imageSave = root.findViewById(R.id.imageSave)
+        imageAdd = root.findViewById(R.id.imageAdd)
+        cardAlbum = root.findViewById(R.id.cardAlbum)
+
+        imageSave!!.setOnClickListener {
+            val photo = Photo(
+                long = long,
+                lat = lat,
+                photo = path,
+                date = null,
+                description = null,
+                label = null,
+                id = 0
+            )
+            (activity as MainActivity).insertPhoto(photo)
+            cardAlbum!!.visibility = View.GONE
+        }
+
+
+        imageAdd!!.setOnClickListener {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select picture"), 1)
+        }
+
+
+
         imageView = root.findViewById(R.id.imageView)
         myconstraint = root.findViewById<View>(R.id.constraint) as CardView
         mMapView = root.findViewById(R.id.mapView)
-        mDefaultLocation = LatLng(12.0,70.0)
-        fab.setOnClickListener {
-            if (!isFABOpen) {
-                showFABMenu()
-            } else {
-                closeFABMenu()
-            }
-        }
+        mDefaultLocation = LatLng(12.0, 70.0)
 
-        fab2.setOnClickListener {
-            val act = activity as MainActivity
-            act.getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, BaseActivity.PERMISSIONS_WRITE_EXTERNAL_STORAGE)
-        }
 
         mMapView!!.onCreate(savedInstanceState)
         mMapView!!.onResume()
@@ -78,55 +102,54 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         mMapView!!.getMapAsync(this)
 
-//        homeViewModel.text.observe(this, Observer {
-//            textView.text = it
-//        })
-
         return root
     }
 
     override fun onMapReady(p0: GoogleMap?) {
 
-        val act =  activity as MainActivity
+        val act = activity as MainActivity
 
         if (p0 != null) {
 
             act.mGoogleMap = p0
             act.mGoogleMap.setOnMarkerClickListener(this)
 
-            val drawable = R.drawable.ic_home_black_24dp
-            val icon = BitmapDescriptorFactory.fromResource(drawable)
-
-            myMarker = act.mGoogleMap.addMarker(
-                MarkerOptions()
-                    .icon(context?.let { ImageUtils.bitmapDescriptorFromVector(it, R.drawable.ic_notifications_black_24dp) })
-                    .position(
-                        LatLng(43.6329,6.9991)
-                    ))
-
-            myMarker = act.mGoogleMap.addMarker(
-                MarkerOptions()
-                    .icon(context?.let { ImageUtils.bitmapDescriptorFromVector(it, R.drawable.ic_notifications_black_24dp) })
-                    .position(
-                        LatLng(48.210033,16.363449)
-                    ))
+//            myMarker = act.mGoogleMap.addMarker(
+//                MarkerOptions()
+//                    .icon(context?.let { ImageUtils.bitmapDescriptorFromVector(it, R.drawable.map_marker) })
+//                    .position(
+//                        LatLng(43.6329,6.9991)
+//                    ))
+//
 
 
             act.mGoogleMap.setOnMapClickListener {
                 myconstraint?.visibility = View.GONE
+                cardAlbum?.visibility = View.GONE
             }
 
             act.mGoogleMap.setOnMapLongClickListener {
-                act.mGoogleMap.addMarker(MarkerOptions().position(it).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)))
+                long = it.longitude
+                lat = it.latitude
+                cardAlbum?.visibility = View.VISIBLE
+                act.mGoogleMap.addMarker(
+                    MarkerOptions().position(it).icon(
+                        BitmapDescriptorFactory.defaultMarker(
+                            BitmapDescriptorFactory.HUE_ORANGE
+                        )
+                    )
+                )
             }
 
             imageView.setOnClickListener {
                 act.moove = true
-                act.getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
+                act.getPermission(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    PERMISSIONS_READ_LOCATION
+                )
             }
 
         }
-
 
 
     }
@@ -136,7 +159,10 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         myconstraint?.visibility = View.VISIBLE
 
         context?.let {
-            ImageUtils.loadImageResize("https://static.thenounproject.com/png/166349-200.png", R.drawable.ic_dashboard_black_24dp, cardAvatar,
+            ImageUtils.loadImageResize(
+                "https://static.thenounproject.com/png/166349-200.png",
+                R.drawable.ic_dashboard_black_24dp,
+                cardAvatar,
                 it
             )
         }
@@ -147,23 +173,29 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         return true
     }
 
-    private fun showFABMenu() {
-        isFABOpen = true
-        fab1.animate().translationY(-resources.getDimension(R.dimen.standard_55))
-        fab2.animate().translationY(-resources.getDimension(R.dimen.standard_105))
-        fab3.animate().translationY(-resources.getDimension(R.dimen.standard_155))
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                uri = data?.data!!
+                path = getRealPathFromURI(uri!!, activity as MainActivity)
+                imageAdd!!.setImageURI(uri)
+
+                }
+            }
+        }
+
+
+    fun getRealPathFromURI(contentURI: Uri, context: Activity): String? {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.managedQuery(contentURI, projection, null, null, null) ?: return null
+        val column_index = cursor
+            .getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        return if (cursor.moveToFirst()) {
+            // cursor.close();
+            cursor.getString(column_index)
+        } else
+            null
+        // cursor.close();
     }
 
-    private fun closeFABMenu() {
-        isFABOpen = false
-        fab1.animate().translationY(0F)
-        fab2.animate().translationY(0F)
-        fab3.animate().translationY(0F)
-    }
-
-
-
-    companion object {
-        const val EXTRA_REPLY = "com.jeluchu.roombbdd.REPLY"
-    }
 }

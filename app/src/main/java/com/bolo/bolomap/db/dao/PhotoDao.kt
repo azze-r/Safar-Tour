@@ -3,7 +3,6 @@ package com.bolo.bolomap.db.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import com.bolo.bolomap.db.entities.Album
 import com.bolo.bolomap.db.entities.Photo
 
 @Dao

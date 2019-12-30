@@ -3,9 +3,7 @@ package com.bolo.bolomap.db.repository
 import androidx.lifecycle.LiveData
 import androidx.annotation.WorkerThread
 import android.os.AsyncTask
-import com.bolo.bolomap.db.dao.AlbumDao
 import com.bolo.bolomap.db.dao.PhotoDao
-import com.bolo.bolomap.db.entities.Album
 import com.bolo.bolomap.db.entities.Photo
 
 

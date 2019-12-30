@@ -1,10 +1,8 @@
-package com.bolo.bolomap
+package com.bolo.bolomap.db.viewmodel
 
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.location.Location
@@ -13,15 +11,13 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.bolo.bolomap.db.dao.AlbumDao
+import com.bolo.bolomap.R
 import com.bolo.bolomap.db.dao.PhotoDao
-import com.bolo.bolomap.db.entities.Album
 import com.bolo.bolomap.db.entities.Photo
 import com.bolo.bolomap.utils.BaseActivity
 import com.bolo.bolomap.utils.ImageUtils
@@ -32,8 +28,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.io.ByteArrayOutputStream
-import kotlin.random.Random
 
 
 class MainActivity : BaseActivity() {
@@ -56,7 +50,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
         val navController = findNavController(R.id.nav_host_fragment)
 
         navView.setupWithNavController(navController)
@@ -68,11 +61,6 @@ class MainActivity : BaseActivity() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
-    }
-
-    fun getDao(): AlbumDao? {
-        val database = RoomDatabase.getDatabase(this)
-        return database.mediaDao()
     }
 
     override fun onPermissionGranted(permission: Int) {
@@ -118,8 +106,12 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    fun insert(photo: Photo) {
+    fun insertPhoto(photo: Photo) {
         InsertAsyncTask(photoDao!!).execute(photo)
+    }
+
+    fun getDao(): PhotoDao? {
+        return photoDao
     }
 
     private class InsertAsyncTask internal constructor(private val mAsyncTaskDao: PhotoDao) :
@@ -158,7 +150,9 @@ class MainActivity : BaseActivity() {
     fun putPicToLatLng(lat:Double, long:Double){
         mGoogleMap.addMarker(
             MarkerOptions()
-                .icon(this.let { ImageUtils.bitmapDescriptorFromVector(it, R.mipmap.ic_launcher_travel_rounded) })
+                .icon(this.let { ImageUtils.bitmapDescriptorFromVector(it,
+                    R.mipmap.ic_launcher_travel_rounded
+                ) })
                 .position(
                     LatLng(lat,long)
                 ))
@@ -173,7 +167,6 @@ class MainActivity : BaseActivity() {
             tempUri = ImageUtils.getImageUri(this, imageBitmap)
             Toast.makeText(this, tempUri?.let { ImageUtils.getRealPathFromURI(it,this) },Toast.LENGTH_LONG).show()
             photos = tempUri?.let { ImageUtils.getRealPathFromURI(it,this) }.toString()
-//            getPermission(Manifest.permission.ACCESS_FINE_LOCATION,PERMISSIONS_READ_LOCATION)
             val photo = Photo(0,null,null,long,lat,photos,null)
             photoViewModel.insert(photo)
             Log.i("tryhard",photo.toString())
@@ -195,12 +188,6 @@ class MainActivity : BaseActivity() {
             }
 
         }
-
-//        else if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
-//
-//            intent?.let { data ->
-//
-//            }
         }
 
 
