@@ -16,6 +16,11 @@ class PhotoRepository(private val photoDao: PhotoDao) {
         photoDao.insert(photo)
     }
 
+    @WorkerThread
+    fun update(photo: Photo) {
+       photoDao.update(photo)
+    }
+
     fun deleteAll() {
         DeleteAllPhotosAsyncTask(photoDao).execute()
     }
@@ -28,8 +33,6 @@ class PhotoRepository(private val photoDao: PhotoDao) {
             return null
         }
     }
-
-    /* ---------------- BORRAR UN SOLO DATO ---------------- */
 
     fun deletePhoto(photo: Photo) {
         DeletePhotoAsyncTask(photoDao).execute(photo)
@@ -44,17 +47,5 @@ class PhotoRepository(private val photoDao: PhotoDao) {
         }
     }
 
-    /* -------------- ACTUALIZAR UN SOLO DATO ---------------- */
 
-    fun update(photo: Photo) {
-        UpdatePhotoAsyncTask(photoDao).execute(photo)
-    }
-
-    private class UpdatePhotoAsyncTask internal constructor(private val mAsyncTaskDao: PhotoDao) :
-        AsyncTask<Photo, Void, Void>() {
-        override fun doInBackground(vararg params: Photo?): Void? {
-            mAsyncTaskDao.update(params[0]!!)
-            return null
-        }
-    }
 }

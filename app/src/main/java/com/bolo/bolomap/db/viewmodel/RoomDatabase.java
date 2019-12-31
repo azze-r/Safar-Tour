@@ -8,7 +8,7 @@ import androidx.room.Room;
 import com.bolo.bolomap.db.dao.PhotoDao;
 import com.bolo.bolomap.db.entities.Photo;
 
-@Database(entities = {Photo.class}, version = 3)
+@Database(entities = {Photo.class}, version = 6)
 public abstract class RoomDatabase extends androidx.room.RoomDatabase {
 
     public abstract PhotoDao photoDao();

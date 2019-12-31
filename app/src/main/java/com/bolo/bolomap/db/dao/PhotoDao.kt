@@ -17,13 +17,16 @@ interface PhotoDao {
     @Query("SELECT * FROM photo WHERE label LIKE :name LIMIT 1")
     fun findByName(name: String): Photo
 
+    @Query("SELECT * FROM photo WHERE id LIKE :id LIMIT 1")
+    fun findById(id: Int): LiveData<Photo>
+
     @Insert
     fun insertAll(vararg photos: Photo)
 
     @Insert(onConflict = REPLACE)
     fun insert(photo: Photo)
 
-    @Update
+    @Update(onConflict = REPLACE)
     fun update(photo:Photo)
 
     @Delete

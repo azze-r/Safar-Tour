@@ -49,11 +49,6 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-
-        navView.setupWithNavController(navController)
-
         val database = RoomDatabase.getDatabase(this)
 
         photoDao = database.photoDao()
@@ -61,8 +56,13 @@ class MainActivity : BaseActivity() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
+
+
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
     override fun onPermissionGranted(permission: Int) {
         when (permission) {
 
@@ -110,6 +110,10 @@ class MainActivity : BaseActivity() {
         InsertAsyncTask(photoDao!!).execute(photo)
     }
 
+    fun updatePhoto(photo: Photo){
+        UpdateAsyncTask(photoDao!!).execute(photo)
+    }
+
     fun getDao(): PhotoDao? {
         return photoDao
     }
@@ -119,6 +123,15 @@ class MainActivity : BaseActivity() {
 
         override fun doInBackground(vararg params: Photo): Void? {
             mAsyncTaskDao.insertAll(params[0])
+            return null
+        }
+    }
+
+    private class UpdateAsyncTask internal constructor(private val mAsyncTaskDao: PhotoDao) :
+        AsyncTask<Photo, Void, Void>() {
+
+        override fun doInBackground(vararg params: Photo): Void? {
+            mAsyncTaskDao.update(params[0])
             return null
         }
     }
@@ -135,15 +148,13 @@ class MainActivity : BaseActivity() {
     }
 
     fun mooveToLatLng(lat:Double, long:Double){
-        if (mGoogleMap != null) {
-
             mGoogleMap.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(lat, long),
                     12.0f
                 )
             )
-        }
+
     }
 
 
@@ -167,9 +178,8 @@ class MainActivity : BaseActivity() {
             tempUri = ImageUtils.getImageUri(this, imageBitmap)
             Toast.makeText(this, tempUri?.let { ImageUtils.getRealPathFromURI(it,this) },Toast.LENGTH_LONG).show()
             photos = tempUri?.let { ImageUtils.getRealPathFromURI(it,this) }.toString()
-            val photo = Photo(0,null,null,long,lat,photos,null)
+            val photo = Photo(0,null,null,long,lat,photos,null,null)
             photoViewModel.insert(photo)
-            Log.i("tryhard",photo.toString())
 
             putPicToLatLng(lat,long)
         }

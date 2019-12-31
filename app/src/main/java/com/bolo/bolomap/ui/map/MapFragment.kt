@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import com.bolo.bolomap.R
 import com.bolo.bolomap.db.entities.Photo
 import com.bolo.bolomap.db.viewmodel.MainActivity
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -38,21 +40,24 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
     private lateinit var homeViewModel: MapViewModel
 
+
+    var textInputEditText: TextInputEditText? = null
+
     var myMarker: Marker? = null
+    var imgList: ImageView? = null
     var imageSave: ImageView? = null
     var imageAdd: ImageView? = null
     var cardAlbum: CardView? = null
     var uri: Uri? = null
     var bitmap: Bitmap? = null
-
     var long: Double = 0.0
     var lat: Double = 0.0
     var mMapView: MapView? = null
     var myconstraint: CardView? = null
-
     lateinit var imageView: ImageView
     var mDefaultLocation: LatLng? = null
     lateinit var photos :ArrayList<Photo>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -63,10 +68,11 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         imageSave = root.findViewById(R.id.imageSave)
         imageAdd = root.findViewById(R.id.imageAdd)
         cardAlbum = root.findViewById(R.id.cardAlbum)
-
-        imageView = root.findViewById(R.id.imageView)
+        imgList = root.findViewById(R.id.imgList)
+        imageView = root.findViewById(R.id.imgLocation)
         myconstraint = root.findViewById<View>(R.id.constraint) as CardView
         mMapView = root.findViewById(R.id.mapView)
+        textInputEditText = root.findViewById(R.id.textInputEditText)
         mDefaultLocation = LatLng(12.0, 70.0)
 
         mMapView!!.onCreate(savedInstanceState)
@@ -80,8 +86,9 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         mMapView!!.getMapAsync(this)
 
-
-
+        imgList!!.setOnClickListener {
+            it.findNavController().navigate(R.id.action_navigation_home_to_navigation_dashboard)
+        }
 
         return root
     }
@@ -121,8 +128,8 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                     photo = uri.toString(),
                     date = null,
                     description = null,
-                    label = null,
-                    id = 0
+                    label = textInputEditText?.text.toString(),
+                    id = 0,photos= null
                 )
 
                 (activity as MainActivity).insertPhoto(photo)
@@ -137,7 +144,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                         ))
 
                 imageAdd?.setImageResource(R.drawable.baseline_add_photo_alternate_black_48);
-
+                textInputEditText?.text = null
             }
 
 
@@ -155,7 +162,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 Observer {
                     photos = it as ArrayList<Photo>
                     for (p in photos) {
-                        Log.i("tryhard",p.toString())
                         var icon = getBitmap(context?.contentResolver, p.photo?.toUri())
                         icon = Bitmap.createScaledBitmap(icon!!, 100, 100, false)
                         myMarker = act.mGoogleMap.addMarker(

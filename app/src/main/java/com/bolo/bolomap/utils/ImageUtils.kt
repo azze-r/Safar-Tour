@@ -104,7 +104,6 @@ class ImageUtils {
                 Glide.with(context).load(file).apply(RequestOptions().centerCrop().placeholder(holderResId)).into(imageView)
             }
             catch (e:Exception){
-                Log.i("tryhard",e.toString())
             }
         }
 

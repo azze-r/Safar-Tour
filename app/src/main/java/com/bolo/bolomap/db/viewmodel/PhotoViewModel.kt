@@ -31,6 +31,11 @@ class PhotoViewModel(application: Application) : AndroidViewModel(application) {
         repository.insert(photo)
     }
 
+    fun update(photo:Photo) = scope.launch(Dispatchers.IO) {
+        repository.update(photo)
+    }
+
+
     override fun onCleared() {
         super.onCleared()
         parentJob.cancel()
@@ -42,10 +47,6 @@ class PhotoViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deletePhoto(photo: Photo) {
         repository.deletePhoto(photo)
-    }
-
-    fun updateWord(photo: Photo) {
-        repository.update(photo)
     }
 
 }

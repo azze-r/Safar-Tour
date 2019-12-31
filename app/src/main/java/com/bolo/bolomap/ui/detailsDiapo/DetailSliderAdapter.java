@@ -1,6 +1,7 @@
 package com.bolo.bolomap.ui.detailsDiapo;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,12 @@ import com.smarteist.autoimageslider.SliderViewAdapter;
 public class DetailSliderAdapter extends SliderViewAdapter<DetailSliderAdapter.SliderAdapterVH> {
 
     private Context context;
+    private String[] urls;
     private int mCount;
 
-    public DetailSliderAdapter(Context context) {
+    public DetailSliderAdapter(Context context, String[] s) {
         this.context = context;
+        urls = s;
     }
 
     public void setCount(int count) {
@@ -35,24 +38,9 @@ public class DetailSliderAdapter extends SliderViewAdapter<DetailSliderAdapter.S
     public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
         viewHolder.textViewDescription.setText("This is slider item " + position);
 
-        switch (position) {
-            case 1:
-                Glide.with(viewHolder.itemView)
-                        .load("https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")
-                        .into(viewHolder.imageViewBackground);
-                break;
-            case 2:
-                Glide.with(viewHolder.itemView)
-                        .load("https://images.pexels.com/photos/929778/pexels-photo-929778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
-                        .into(viewHolder.imageViewBackground);
-                break;
-            default:
-                Glide.with(viewHolder.itemView)
-                        .load("https://images.pexels.com/photos/218983/pexels-photo-218983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
-                        .into(viewHolder.imageViewBackground);
-                break;
-
-        }
+        Glide.with(context)
+                .load(Uri.parse(urls[position]))
+                .into(viewHolder.imageViewBackground);
 
     }
 

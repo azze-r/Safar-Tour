@@ -12,9 +12,10 @@ class Photo (
     @ColumnInfo(name = "long") val long: Double?,
     @ColumnInfo(name = "lat") val lat: Double?,
     @ColumnInfo(name = "photo") val photo: String?,
+    @ColumnInfo(name = "photos") var photos: String?,
     @ColumnInfo(name = "description") val description: String?)
 {
     override fun toString(): String {
-        return "AlbumDao(id=$id, date=$date, label=$label, long=$long, lat=$lat, photo=$photo, description=$description)"
+        return "Photo(id=$id, date=$date, label=$label, long=$long, lat=$lat, photo=$photo, photos=$photos, description=$description)"
     }
 }

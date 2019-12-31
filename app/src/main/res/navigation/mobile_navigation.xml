@@ -9,11 +9,19 @@
         android:id="@+id/navigation_home"
         android:name="com.bolo.bolomap.ui.map.MapFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            android:id="@+id/action_navigation_home_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.bolo.bolomap.ui.travelog.TravelogFragment"
+        android:name="com.bolo.bolomap.ui.travelog.ListAlbumsFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" >
         <action
@@ -31,6 +39,14 @@
             app:exitAnim="@anim/slide_out_left"
             android:id="@+id/action_navigation_dashboard_to_navigation_diapo"
             app:destination="@id/navigation_diapo" />
+        <action
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            android:id="@+id/action_navigation_dashboard_to_navigation_home"
+            app:destination="@id/navigation_home" />
+
     </fragment>
 
     <fragment
@@ -54,6 +70,10 @@
         <argument
             android:name="pic"
             app:argType="string" />
+        <argument
+            android:name="albumId"
+            app:argType="integer"
+            android:defaultValue="0" />
         </action>
 
     </fragment>
@@ -63,9 +83,15 @@
         android:name="com.bolo.bolomap.ui.detailsDiapo.DetailFragment"
         android:label="Details Diapo"
         tools:layout="@layout/fragment_detail_diapo" >
-        <argument android:name="userName"
-            android:defaultValue= "https://mcdaniel.hu/wp-content/uploads/2015/02/globe-map-suitcase-travel-1176x445.jpg"/>
+        <argument
+            android:name="albumId"
+            app:argType="integer"
+            android:defaultValue="0" />
         <action
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
             android:id="@+id/action_navigation_detail_self"
             app:destination="@id/navigation_detail" />
     </fragment>

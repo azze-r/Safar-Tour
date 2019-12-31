@@ -1,14 +1,18 @@
 package com.bolo.bolomap.ui.diapoarama
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.bolo.bolomap.R
-import com.bolo.bolomap.utils.ImageUtils
-import kotlinx.android.synthetic.main.view_item_list_diapo.view.*
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.view_item_list_diapo.view.imgPic
+import java.lang.Exception
 
 class DiapoAdapter(val fragment: DiapoFragment,val url: List<String>) : RecyclerView.Adapter<DiapoAdapter.ViewHolder>() {
 
@@ -24,13 +28,19 @@ class DiapoAdapter(val fragment: DiapoFragment,val url: List<String>) : Recycler
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val media = url[position]
+        val url = url[position]
 
         holder.itemView.apply {
-            ImageUtils.loadImageResize(media, R.drawable.ic_launcher_background, imgPic,context)
+            try {
+                Glide.with(fragment)
+                    .load(Uri.parse(url))
+                    .into(imgPic)
+
+            }
+            catch (e:Exception){}
+
             setOnClickListener {
-                val bundle = bundleOf("userName" to media)
-                fragment.navDetails(bundle)
+                fragment.navDetails()
             }
         }
     }
