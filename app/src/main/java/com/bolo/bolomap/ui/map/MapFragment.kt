@@ -1,17 +1,20 @@
 package com.bolo.bolomap.ui.map
 
 import android.Manifest
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
+import android.provider.MediaStore.Images.Media.getBitmap
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
+import androidx.core.net.toUri
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bolo.bolomap.R
 import com.bolo.bolomap.db.entities.Photo
@@ -40,7 +43,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     var imageAdd: ImageView? = null
     var cardAlbum: CardView? = null
     var uri: Uri? = null
-    var path: String? = null
+    var bitmap: Bitmap? = null
 
     var long: Double = 0.0
     var lat: Double = 0.0
@@ -49,7 +52,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
     lateinit var imageView: ImageView
     var mDefaultLocation: LatLng? = null
-
+    lateinit var photos :ArrayList<Photo>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -61,35 +64,10 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         imageAdd = root.findViewById(R.id.imageAdd)
         cardAlbum = root.findViewById(R.id.cardAlbum)
 
-        imageSave!!.setOnClickListener {
-            val photo = Photo(
-                long = long,
-                lat = lat,
-                photo = path,
-                date = null,
-                description = null,
-                label = null,
-                id = 0
-            )
-            (activity as MainActivity).insertPhoto(photo)
-            cardAlbum!!.visibility = View.GONE
-        }
-
-
-        imageAdd!!.setOnClickListener {
-            val intent = Intent()
-            intent.type = "image/*"
-            intent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(Intent.createChooser(intent, "Select picture"), 1)
-        }
-
-
-
         imageView = root.findViewById(R.id.imageView)
         myconstraint = root.findViewById<View>(R.id.constraint) as CardView
         mMapView = root.findViewById(R.id.mapView)
         mDefaultLocation = LatLng(12.0, 70.0)
-
 
         mMapView!!.onCreate(savedInstanceState)
         mMapView!!.onResume()
@@ -101,6 +79,9 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         }
 
         mMapView!!.getMapAsync(this)
+
+
+
 
         return root
     }
@@ -114,15 +95,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
             act.mGoogleMap = p0
             act.mGoogleMap.setOnMarkerClickListener(this)
 
-//            myMarker = act.mGoogleMap.addMarker(
-//                MarkerOptions()
-//                    .icon(context?.let { ImageUtils.bitmapDescriptorFromVector(it, R.drawable.map_marker) })
-//                    .position(
-//                        LatLng(43.6329,6.9991)
-//                    ))
-//
-
-
             act.mGoogleMap.setOnMapClickListener {
                 myconstraint?.visibility = View.GONE
                 cardAlbum?.visibility = View.GONE
@@ -132,13 +104,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 long = it.longitude
                 lat = it.latitude
                 cardAlbum?.visibility = View.VISIBLE
-                act.mGoogleMap.addMarker(
-                    MarkerOptions().position(it).icon(
-                        BitmapDescriptorFactory.defaultMarker(
-                            BitmapDescriptorFactory.HUE_ORANGE
-                        )
-                    )
-                )
             }
 
             imageView.setOnClickListener {
@@ -148,6 +113,60 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                     PERMISSIONS_READ_LOCATION
                 )
             }
+
+            imageSave!!.setOnClickListener {
+                val photo = Photo(
+                    long = long,
+                    lat = lat,
+                    photo = uri.toString(),
+                    date = null,
+                    description = null,
+                    label = null,
+                    id = 0
+                )
+
+                (activity as MainActivity).insertPhoto(photo)
+
+                cardAlbum!!.visibility = View.GONE
+
+                myMarker = act.mGoogleMap.addMarker(
+                    MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                        .position(
+                            LatLng(lat,long)
+                        ))
+
+                imageAdd?.setImageResource(R.drawable.baseline_add_photo_alternate_black_48);
+
+            }
+
+
+            imageAdd!!.setOnClickListener {
+                val intent = Intent()
+                intent.type = "image/*"
+                intent.action = Intent.ACTION_OPEN_DOCUMENT
+                startActivityForResult(Intent.createChooser(intent, "Select picture"), 1)
+            }
+
+
+            val photoDao = (activity as MainActivity).getDao()
+
+            photoDao!!.getAllPhotos().observe(this,
+                Observer {
+                    photos = it as ArrayList<Photo>
+                    for (p in photos) {
+                        Log.i("tryhard",p.toString())
+                        var icon = getBitmap(context?.contentResolver, p.photo?.toUri())
+                        icon = Bitmap.createScaledBitmap(icon!!, 100, 100, false)
+                        myMarker = act.mGoogleMap.addMarker(
+                            MarkerOptions()
+                                .icon(BitmapDescriptorFactory.fromBitmap(icon))
+                                .position(
+                                    LatLng(p.lat!!, p.long!!)
+                                )
+                        )
+                    }
+                })
 
         }
 
@@ -177,25 +196,14 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 uri = data?.data!!
-                path = getRealPathFromURI(uri!!, activity as MainActivity)
                 imageAdd!!.setImageURI(uri)
-
-                }
+                bitmap = getBitmap(context?.contentResolver, uri)
+                val height = 100
+                val width = 100
+                bitmap = Bitmap.createScaledBitmap(bitmap!!, width, height, false)
             }
         }
-
-
-    fun getRealPathFromURI(contentURI: Uri, context: Activity): String? {
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = context.managedQuery(contentURI, projection, null, null, null) ?: return null
-        val column_index = cursor
-            .getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        return if (cursor.moveToFirst()) {
-            // cursor.close();
-            cursor.getString(column_index)
-        } else
-            null
-        // cursor.close();
     }
+
 
 }
