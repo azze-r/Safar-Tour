@@ -29,12 +29,7 @@ class DetailSliderAdapter(private val context: Context, private val urls: Array<
 
 
     override fun onBindViewHolder(viewHolder: SliderAdapterVH, position: Int) {
-
-        if (urls[position] == "null") {
-            ImageUtils.loadImageUriResize(urls[position+1],R.drawable.baseline_add_photo_alternate_black_48,viewHolder.imageViewBackground,context)
-        } else {
-            ImageUtils.loadImageUriResize(urls[position],R.drawable.baseline_add_photo_alternate_black_48,viewHolder.imageViewBackground,context)
-        }
+        ImageUtils.loadImageUriResize(urls[position],R.drawable.baseline_add_photo_alternate_black_48,viewHolder.imageViewBackground,context)
     }
 
     override fun getCount(): Int {

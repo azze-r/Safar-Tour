@@ -49,15 +49,11 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val database = RoomDatabase.getDatabase(this)
-
         photoDao = database.photoDao()
-
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-
         photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
-
-
     }
 
     override fun onPermissionGranted(permission: Int) {
@@ -111,6 +107,10 @@ class MainActivity : BaseActivity() {
         UpdateAsyncTask(photoDao!!).execute(photo)
     }
 
+    fun deletePhoto(photo: Photo){
+        DeleteAsyncTask(photoDao!!).execute(photo)
+    }
+
     fun getDao(): PhotoDao? {
         return photoDao
     }
@@ -129,6 +129,15 @@ class MainActivity : BaseActivity() {
 
         override fun doInBackground(vararg params: Photo): Void? {
             mAsyncTaskDao.update(params[0])
+            return null
+        }
+    }
+
+    private class DeleteAsyncTask internal constructor(private val mAsyncTaskDao: PhotoDao) :
+        AsyncTask<Photo, Void, Void>() {
+
+        override fun doInBackground(vararg params: Photo): Void? {
+            mAsyncTaskDao.delete(params[0])
             return null
         }
     }

@@ -9,7 +9,7 @@ import com.bolo.bolomap.db.entities.Photo
 
 class PhotoRepository(private val photoDao: PhotoDao) {
 
-    val allWords: LiveData<List<Photo>> = photoDao.getAllPhotos()
+    val allPhotos: LiveData<List<Photo>> = photoDao.getAllPhotos()
 
     @WorkerThread
     fun insert(photo: Photo) {
@@ -46,6 +46,8 @@ class PhotoRepository(private val photoDao: PhotoDao) {
             return null
         }
     }
+
+
 
 
 }

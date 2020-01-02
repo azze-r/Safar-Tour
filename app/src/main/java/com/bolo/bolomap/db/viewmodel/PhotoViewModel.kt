@@ -24,7 +24,7 @@ class PhotoViewModel(application: Application) : AndroidViewModel(application) {
     init {
         val photosDao = RoomDatabase.getDatabase(application).photoDao()
         repository = PhotoRepository(photosDao)
-        allPhotos = repository.allWords
+        allPhotos = repository.allPhotos
     }
 
     fun insert(photo:Photo) = scope.launch(Dispatchers.IO) {

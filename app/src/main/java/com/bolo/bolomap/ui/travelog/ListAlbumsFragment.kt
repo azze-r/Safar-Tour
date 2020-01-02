@@ -44,7 +44,7 @@ class ListAlbumsFragment : Fragment() {
         localRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         map!!.setOnClickListener {
-            it.findNavController().navigate(R.id.action_navigation_dashboard_to_navigation_home)
+            (activity as MainActivity).onBackPressed()
         }
 
         return root

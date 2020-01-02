@@ -22,6 +22,13 @@ import com.bolo.bolomap.R
 import com.bolo.bolomap.db.entities.Photo
 import com.bolo.bolomap.db.viewmodel.MainActivity
 import com.bolo.bolomap.ui.travelog.ListAlbumsViewModel
+import android.R.attr.data
+import android.R.attr.data
+import android.content.ClipData
+
+
+
+
 
 
 class DiapoFragment : Fragment() {
@@ -38,7 +45,6 @@ class DiapoFragment : Fragment() {
         listAlbumsViewModel =
             ViewModelProviders.of(this).get(ListAlbumsViewModel::class.java)
         val id = arguments?.getInt("albumId") ?: 0
-        Log.i("tryhard", "id found : $id")
 
         val root = inflater.inflate(R.layout.fragment_all_diapo, container, false)
         imgAdd = root.findViewById(R.id.imgAdd)
@@ -50,7 +56,6 @@ class DiapoFragment : Fragment() {
 
         photoDao!!.findById(id).observe(this,
             Observer {
-                Log.i("tryhard", "album found : $it")
                 if (it != null) {
                     photo = it
                     if (it.photos != null) {
@@ -63,6 +68,7 @@ class DiapoFragment : Fragment() {
         imgAdd.setOnClickListener {
             val intent = Intent()
             intent.type = "image/*"
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             intent.action = Intent.ACTION_OPEN_DOCUMENT
             startActivityForResult(Intent.createChooser(intent, "Select picture"), 1)
         }
@@ -99,10 +105,24 @@ class DiapoFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
-                val uri = data?.data!!
                 val photos = ArrayList<String>()
-                photos.addAll(convertStringToArray(photo.photos.toString()))
-                photos.add(uri.toString())
+                if (data != null) {
+                    if (photo.photos != null)
+                        photos.addAll(convertStringToArray(photo.photos.toString()))
+
+                    val clipData = data.clipData
+                    if (clipData != null) {
+                        for (i in 0 until clipData.itemCount) {
+                            val imageUri = clipData.getItemAt(i).uri
+                            photos.add(imageUri.toString())
+                        }
+                    }
+                    else {
+                        val uri = data.data
+                        photos.add(uri.toString())
+                    }
+                }
+
                 photo.photos = convertArrayToString(photos)
                 (activity as MainActivity).updatePhoto(photo)
             }

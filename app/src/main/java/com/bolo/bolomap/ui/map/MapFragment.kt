@@ -2,6 +2,7 @@ package com.bolo.bolomap.ui.map
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_home.*
+import androidx.appcompat.app.AlertDialog
 
 
 class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -47,7 +49,11 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
     var mMapView: MapView? = null
     var myconstraint: CardView? = null
-    lateinit var imageView: ImageView
+    var currentAlbum:Photo? = null
+    lateinit var imgLocation: ImageView
+    lateinit var imgDelete: ImageView
+
+
     lateinit var photos :ArrayList<Photo>
 
     override fun onCreateView(
@@ -61,7 +67,8 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         imageAdd = root.findViewById(R.id.imageAdd)
         cardAlbum = root.findViewById(R.id.cardAlbum)
         imgList = root.findViewById(R.id.imgList)
-        imageView = root.findViewById(R.id.imgLocation)
+        imgLocation = root.findViewById(R.id.imgLocation)
+        imgDelete = root.findViewById(R.id.imgDelete)
         myconstraint = root.findViewById<View>(R.id.constraint) as CardView
         mMapView = root.findViewById(R.id.mapView)
         textInputEditText = root.findViewById(R.id.textInputEditText)
@@ -90,8 +97,22 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         if (p0 != null) {
 
+            val photoDao = (activity as MainActivity).getDao()
 
-            updateMarkersMap()
+            photoDao!!.getAllPhotos().observe(this,
+                Observer {
+                    photos = it as ArrayList<Photo>
+                    act.mGoogleMap.clear()
+                    for (p in photos) {
+                        myMarker = act.mGoogleMap.addMarker(
+                            MarkerOptions()
+                                .position(
+                                    LatLng(p.lat!!, p.long!!)
+                                )
+                        )
+                        myMarker!!.tag = p.id
+                    }
+                })
 
             act.mGoogleMap = p0
             act.mGoogleMap.setOnMarkerClickListener(this)
@@ -107,13 +128,15 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 cardAlbum?.visibility = View.VISIBLE
             }
 
-            imageView.setOnClickListener {
+            imgLocation.setOnClickListener {
                 act.moove = true
                 act.getPermission(
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     PERMISSIONS_READ_LOCATION
                 )
             }
+
+
 
             imageSave!!.setOnClickListener {
                 val photo = Photo(
@@ -130,7 +153,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 imageAdd?.setImageResource(R.drawable.baseline_add_photo_alternate_black_48)
                 textInputEditText?.text = null
 
-                updateMarkersMap()
+                //updateMarkersMap()
 
             }
 
@@ -141,6 +164,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 startActivityForResult(Intent.createChooser(intent, "Select picture"), 1)
             }
 
+
         }
 
 
@@ -148,33 +172,59 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
     override fun onMarkerClick(p0: Marker?): Boolean {
 
-        Log.i("tryhard", p0?.tag.toString())
         myconstraint?.visibility = View.VISIBLE
         val photoDao = (activity as MainActivity).getDao()
 
         photoDao!!.findById(p0?.tag as Int).observe(this,
             Observer {
-                DateUtils.lat = it.lat!!
-                DateUtils.long = it.long!!
-                Log.i("tryhard", "album found : $it")
-                context?.let { it1 ->
-                    ImageUtils.loadImageUriResize(it.photo,R.drawable.baseline_add_photo_alternate_black_48,imgAvatar,it1)
-                }
-                if (it.label.isNullOrEmpty())
-                    textTitle.text = "No Title"
-                else
-                    textTitle.text = it.label
+                if (it != null) {
+                    currentAlbum = it
+                    DateUtils.lat = it.lat!!
+                    DateUtils.long = it.long!!
+                    context?.let { it1 ->
+                        ImageUtils.loadImageUriResize(
+                            it.photo,
+                            R.drawable.baseline_add_photo_alternate_black_48,
+                            imgAvatar,
+                            it1
+                        )
+                    }
 
-                myconstraint?.setOnClickListener {
-                    Log.i("tryhard", "id to send : ${p0.tag}")
+                    if (it.label.isNullOrEmpty())
+                        textTitle.text = "No Title"
+                    else
+                        textTitle.text = it.label
 
-                    val bundle = bundleOf("albumId" to p0.tag)
-                    view?.findNavController()?.navigate(R.id.action_navigation_home_to_navigation_diapo,bundle)
+                    imgAvatar?.setOnClickListener {
+                        val bundle = bundleOf("albumId" to p0.tag)
+                        view?.findNavController()
+                            ?.navigate(com.bolo.bolomap.R.id.action_navigation_home_to_navigation_diapo, bundle)
+                    }
                 }
+
             })
 
+        imgDelete.setOnClickListener {
+            currentAlbum?.let {
+                // setup the alert builder
+                val builder = AlertDialog.Builder(context!!)
+                builder.setMessage("Do you really want to delete this album?")
+                    .setPositiveButton("yes"
+                    )
+                    { _, _ ->
+                        (activity as MainActivity).deletePhoto(it)
+                        myconstraint?.visibility = View.GONE
+                    }
+                    .setNegativeButton("no"
+                    ) { dialog, id ->
+                        dialog.dismiss()
+                    }
 
-
+                // Create the AlertDialog object and return it
+                builder.create()
+                builder.show()
+            }
+        }
 
         return true
     }
@@ -184,34 +234,12 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
             if (resultCode == RESULT_OK) {
                 uri = data?.data!!
                 context?.let {
-                    imageAdd?.let { it1 ->
-                        ImageUtils.loadImageUriResize(uri.toString(),R.drawable.baseline_add_photo_alternate_black_48,imgAvatar,context!!)
+                    imageAdd?.let { img ->
+                        ImageUtils.loadImageUriResize(uri.toString(),R.drawable.baseline_add_photo_alternate_black_48,img,context!!)
                     }
                 }
             }
         }
     }
 
-    fun updateMarkersMap(){
-        val act = activity as MainActivity
-
-        val photoDao = (activity as MainActivity).getDao()
-
-        photoDao!!.getAllPhotos().observe(this,
-            Observer {
-                photos = it as ArrayList<Photo>
-                for (p in photos) {
-//                    var icon = getBitmap(context?.contentResolver, Uri.parse(p.photo))
-//                    icon = Bitmap.createScaledBitmap(icon!!, 100, 100, false)
-                    myMarker = act.mGoogleMap.addMarker(
-                        MarkerOptions()
-//                            .icon(BitmapDescriptorFactory.fromBitmap(icon))
-                            .position(
-                                LatLng(p.lat!!, p.long!!)
-                            )
-                    )
-                    myMarker!!.tag = p.id
-                }
-            })
-    }
 }
