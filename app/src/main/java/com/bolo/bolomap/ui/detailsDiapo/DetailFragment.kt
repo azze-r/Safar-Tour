@@ -40,7 +40,6 @@ class DetailFragment : Fragment() {
         photoDao!!.findById(id).observe(this,
             Observer {
                 photo = it
-                Log.i("tryhard",photo.toString())
                 if (photo.photos != null) {
                     val list = convertStringToArray(photo.photos!!)
                     val sliderView:SliderView =  root.findViewById(R.id.imageSlider)

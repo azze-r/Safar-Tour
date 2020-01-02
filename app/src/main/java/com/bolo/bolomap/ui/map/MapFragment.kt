@@ -5,6 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.Log
@@ -14,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
@@ -23,6 +25,7 @@ import com.bolo.bolomap.db.viewmodel.MainActivity
 import com.bolo.bolomap.utils.BaseActivity.Companion.PERMISSIONS_READ_LOCATION
 import com.bolo.bolomap.utils.BaseFragment
 import com.bolo.bolomap.utils.ImageUtils
+import com.bumptech.glide.Glide
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
@@ -39,10 +42,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
 
     private lateinit var homeViewModel: MapViewModel
-
-
     var textInputEditText: TextInputEditText? = null
-
     var myMarker: Marker? = null
     var imgList: ImageView? = null
     var imageSave: ImageView? = null
@@ -99,6 +99,9 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         if (p0 != null) {
 
+
+            updateMarkersMap()
+
             act.mGoogleMap = p0
             act.mGoogleMap.setOnMarkerClickListener(this)
 
@@ -133,20 +136,13 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 )
 
                 (activity as MainActivity).insertPhoto(photo)
-
                 cardAlbum!!.visibility = View.GONE
-
-                myMarker = act.mGoogleMap.addMarker(
-                    MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
-                        .position(
-                            LatLng(lat,long)
-                        ))
-
-                imageAdd?.setImageResource(R.drawable.baseline_add_photo_alternate_black_48);
+                imageAdd?.setImageResource(R.drawable.baseline_add_photo_alternate_black_48)
                 textInputEditText?.text = null
-            }
 
+                updateMarkersMap()
+
+            }
 
             imageAdd!!.setOnClickListener {
                 val intent = Intent()
@@ -155,25 +151,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 startActivityForResult(Intent.createChooser(intent, "Select picture"), 1)
             }
 
-
-            val photoDao = (activity as MainActivity).getDao()
-
-            photoDao!!.getAllPhotos().observe(this,
-                Observer {
-                    photos = it as ArrayList<Photo>
-                    for (p in photos) {
-                        var icon = getBitmap(context?.contentResolver, p.photo?.toUri())
-                        icon = Bitmap.createScaledBitmap(icon!!, 100, 100, false)
-                        myMarker = act.mGoogleMap.addMarker(
-                            MarkerOptions()
-                                .icon(BitmapDescriptorFactory.fromBitmap(icon))
-                                .position(
-                                    LatLng(p.lat!!, p.long!!)
-                                )
-                        )
-                    }
-                })
-
         }
 
 
@@ -181,20 +158,35 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
     override fun onMarkerClick(p0: Marker?): Boolean {
 
+        Log.i("tryhard", p0?.tag.toString())
         myconstraint?.visibility = View.VISIBLE
 
-        context?.let {
-            ImageUtils.loadImageResize(
-                "https://static.thenounproject.com/png/166349-200.png",
-                R.drawable.ic_dashboard_black_24dp,
-                cardAvatar,
-                it
-            )
-        }
+        val photoDao = (activity as MainActivity).getDao()
 
-        textTitle.text = "name"
-        textDesc.text = "address"
-        textPhone.text = "phone"
+        photoDao!!.findById(p0?.tag as Int).observe(this,
+            Observer {
+                Log.i("tryhard", "album found : $it")
+                context?.let { it1 ->
+                    Glide.with(it1)
+                        .load(Uri.parse(it.photo))
+                        .into(cardAvatar)
+                }
+                if (it.label.isNullOrEmpty())
+                    textTitle.text = "No Title"
+                else
+                    textTitle.text = it.label
+
+                myconstraint?.setOnClickListener {
+                    Log.i("tryhard", "id to send : ${p0.tag}")
+
+                    val bundle = bundleOf("albumId" to p0.tag)
+                    view?.findNavController()?.navigate(R.id.action_navigation_home_to_navigation_diapo,bundle)
+                }
+            })
+
+
+
+
         return true
     }
 
@@ -211,5 +203,26 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         }
     }
 
+    fun updateMarkersMap(){
+        val act = activity as MainActivity
 
+        val photoDao = (activity as MainActivity).getDao()
+
+        photoDao!!.getAllPhotos().observe(this,
+            Observer {
+                photos = it as ArrayList<Photo>
+                for (p in photos) {
+//                    var icon = getBitmap(context?.contentResolver, Uri.parse(p.photo))
+//                    icon = Bitmap.createScaledBitmap(icon!!, 100, 100, false)
+                    myMarker = act.mGoogleMap.addMarker(
+                        MarkerOptions()
+//                            .icon(BitmapDescriptorFactory.fromBitmap(icon))
+                            .position(
+                                LatLng(p.lat!!, p.long!!)
+                            )
+                    )
+                    myMarker!!.tag = p.id
+                }
+            })
+    }
 }

@@ -17,6 +17,13 @@
             app:exitAnim="@anim/slide_out_left"
             android:id="@+id/action_navigation_home_to_navigation_dashboard"
             app:destination="@id/navigation_dashboard" />
+        <action
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            android:id="@+id/action_navigation_home_to_navigation_diapo"
+            app:destination="@id/navigation_diapo" />
     </fragment>
 
     <fragment
@@ -24,13 +31,6 @@
         android:name="com.bolo.bolomap.ui.travelog.ListAlbumsFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" >
-        <action
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            android:id="@+id/action_navigation_dashboard_to_navigation_media_form"
-            app:destination="@id/navigation_media_form" />
 
         <action
             app:popEnterAnim="@anim/slide_in_left"
@@ -48,12 +48,6 @@
             app:destination="@id/navigation_home" />
 
     </fragment>
-
-    <fragment
-        android:id="@+id/navigation_media_form"
-        android:name="com.bolo.bolomap.ui.form.MediaFormFragment"
-        android:label="@string/media_form"
-        tools:layout="@layout/media_form_fragment" />
 
     <fragment
         android:id="@+id/navigation_diapo"

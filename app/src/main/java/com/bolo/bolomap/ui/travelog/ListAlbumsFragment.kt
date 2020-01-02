@@ -52,7 +52,6 @@ class ListAlbumsFragment : Fragment() {
 
     fun navDiapo(id: Int) {
         val bundle = bundleOf("albumId" to id)
-
         view?.findNavController()?.navigate(R.id.action_navigation_dashboard_to_navigation_diapo,bundle)
     }
 

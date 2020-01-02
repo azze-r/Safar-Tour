@@ -1,6 +1,7 @@
 package com.bolo.bolomap.ui.travelog
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bolo.bolomap.R
 import com.bolo.bolomap.db.entities.Photo
 import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.view_item_list_medias.view.*
 
 
@@ -31,10 +33,8 @@ class ListAlbumsAdapter(val fragment: ListAlbumsFragment, val photos: List<Photo
 
         holder.itemView.apply {
             try {
-                val bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, photo.photo?.toUri())
                 Glide.with(context)
-                    .asBitmap()
-                    .load(bitmap)
+                    .load(Uri.parse(photo.photo))
                     .into(imgPic)
 
                 if (photo.label.isNullOrEmpty())

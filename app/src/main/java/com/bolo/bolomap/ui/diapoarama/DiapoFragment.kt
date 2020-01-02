@@ -38,6 +38,7 @@ class DiapoFragment : Fragment() {
         listAlbumsViewModel =
             ViewModelProviders.of(this).get(ListAlbumsViewModel::class.java)
         val id = arguments?.getInt("albumId") ?: 0
+        Log.i("tryhard", "id found : $id")
 
         val root = inflater.inflate(R.layout.fragment_all_diapo, container, false)
         imgAdd = root.findViewById(R.id.imgAdd)
@@ -49,11 +50,13 @@ class DiapoFragment : Fragment() {
 
         photoDao!!.findById(id).observe(this,
             Observer {
-                photo = it
-                Log.i("tryhard",photo.toString())
-                if (photo.photos != null) {
-                    val list = convertStringToArray(photo.photos!!)
-                    localRecycler.adapter = DiapoAdapter(this,list.toList())
+                Log.i("tryhard", "album found : $it")
+                if (it != null) {
+                    photo = it
+                    if (it.photos != null) {
+                        val list = convertStringToArray(it.photos!!)
+                        localRecycler.adapter = DiapoAdapter(this, list.toList())
+                    }
                 }
             })
 
@@ -101,7 +104,6 @@ class DiapoFragment : Fragment() {
                 photos.addAll(convertStringToArray(photo.photos.toString()))
                 photos.add(uri.toString())
                 photo.photos = convertArrayToString(photos)
-                Log.i("tryhard",photo.toString())
                 (activity as MainActivity).updatePhoto(photo)
             }
         }

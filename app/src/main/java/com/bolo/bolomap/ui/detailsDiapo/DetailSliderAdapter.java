@@ -36,12 +36,17 @@ public class DetailSliderAdapter extends SliderViewAdapter<DetailSliderAdapter.S
 
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
-        viewHolder.textViewDescription.setText("This is slider item " + position);
 
-        Glide.with(context)
-                .load(Uri.parse(urls[position]))
-                .into(viewHolder.imageViewBackground);
-
+        if (urls[position].equals("null")){
+            Glide.with(context)
+                    .load(Uri.parse(urls[position+1]))
+                    .into(viewHolder.imageViewBackground);
+        }
+        else {
+            Glide.with(context)
+                    .load(Uri.parse(urls[position]))
+                    .into(viewHolder.imageViewBackground);
+        }
     }
 
     @Override
@@ -54,12 +59,10 @@ public class DetailSliderAdapter extends SliderViewAdapter<DetailSliderAdapter.S
 
         View itemView;
         ImageView imageViewBackground;
-        TextView textViewDescription;
 
         public SliderAdapterVH(View itemView) {
             super(itemView);
             imageViewBackground = itemView.findViewById(R.id.iv_auto_image_slider);
-            textViewDescription = itemView.findViewById(R.id.tv_auto_image_slider);
             this.itemView = itemView;
         }
     }
