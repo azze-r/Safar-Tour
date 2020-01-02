@@ -27,12 +27,10 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_home.*
 import androidx.appcompat.app.AlertDialog
+import com.google.android.gms.maps.model.*
 
 
 class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -52,13 +50,14 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     var currentAlbum:Photo? = null
     lateinit var imgLocation: ImageView
     lateinit var imgDelete: ImageView
-
+    var icon: BitmapDescriptor? = null
 
     lateinit var photos :ArrayList<Photo>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+
 
         homeViewModel = ViewModelProviders.of(this).get(MapViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
@@ -104,12 +103,12 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                     photos = it as ArrayList<Photo>
                     act.mGoogleMap.clear()
                     for (p in photos) {
+                        icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_travel_rounded)
                         myMarker = act.mGoogleMap.addMarker(
                             MarkerOptions()
-                                .position(
-                                    LatLng(p.lat!!, p.long!!)
-                                )
-                        )
+                                .icon(icon)
+                                .position(LatLng(p.lat!!, p.long!!)))
+
                         myMarker!!.tag = p.id
                     }
                 })
