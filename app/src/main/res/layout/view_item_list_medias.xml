@@ -7,7 +7,19 @@
     android:layout_marginBottom="16dp"
     android:layout_height="wrap_content">
 
+    <TextView
+        android:id="@+id/label"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textSize="30sp"
+        tool:layout_editor_absoluteX="266dp"
+        tool:layout_editor_absoluteY="40dp"
+        tool:text="label" />
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/card"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginStart="8dp"
@@ -20,47 +32,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ImageView
+            android:id="@+id/imgPic"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/imgPic"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/view"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tool:background="@tools:sample/avatars" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.63"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:gravity="start"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.66"
-                app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.19999999"
-                tool:text="label" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="match_parent"
+            tool:background="@tools:sample/avatars" />
 
     </androidx.cardview.widget.CardView>
 

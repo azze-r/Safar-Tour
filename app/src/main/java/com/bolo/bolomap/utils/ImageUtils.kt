@@ -98,6 +98,13 @@ class ImageUtils {
             Glide.with(context).load(uri).apply(RequestOptions().centerCrop().placeholder(holderResId)).into(imageView)
         }
 
+        fun loadImageUriResize(uri: String?,  holderResId: Int, imageView: ImageView,context:Context) {
+            Glide.with(context)
+                .load(Uri.parse(uri))
+                .apply(RequestOptions().centerCrop().placeholder(holderResId))
+                .into(imageView)
+        }
+
         fun loadImageResizeLocal(uri: Uri, holderResId: Int, imageView: ImageView, context:Context) {
             try{
                 val file = File(Uri.decode(uri.path))

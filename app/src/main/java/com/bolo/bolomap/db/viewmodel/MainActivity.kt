@@ -60,9 +60,6 @@ class MainActivity : BaseActivity() {
 
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
     override fun onPermissionGranted(permission: Int) {
         when (permission) {
 

@@ -2,16 +2,14 @@ package com.bolo.bolomap.ui.travelog
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bolo.bolomap.R
 import com.bolo.bolomap.db.entities.Photo
+import com.bolo.bolomap.utils.ImageUtils
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.view_item_list_medias.view.*
 
 
@@ -33,9 +31,7 @@ class ListAlbumsAdapter(val fragment: ListAlbumsFragment, val photos: List<Photo
 
         holder.itemView.apply {
             try {
-                Glide.with(context)
-                    .load(Uri.parse(photo.photo))
-                    .into(imgPic)
+                ImageUtils.loadImageUriResize(photo.photo,R.drawable.baseline_add_photo_alternate_black_48,imgPic,context)
 
                 if (photo.label.isNullOrEmpty())
                     label.text = "Aucun titre"

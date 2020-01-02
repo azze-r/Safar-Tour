@@ -44,7 +44,7 @@ class DetailFragment : Fragment() {
                     val list = convertStringToArray(photo.photos!!)
                     val sliderView:SliderView =  root.findViewById(R.id.imageSlider)
 
-                    val adapter = DetailSliderAdapter(context,list)
+                    val adapter = DetailSliderAdapter(context!!,list)
                     adapter.count = list.size
                     sliderView.sliderAdapter = adapter
                     sliderView.setIndicatorAnimation(IndicatorAnimations.SLIDE) //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!

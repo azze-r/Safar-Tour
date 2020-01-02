@@ -16,6 +16,8 @@ object DateUtils {
     private const val DATE_FORMAT = "yyyy-MM-dd hh:mm:ss.sss'Z'"
     private const val FORM_DATE_FORMAT = "dd/MM/yyyy"
     private const val SEND_DATE_FORMAT = "yyyy-MM-dd"
+    var long: Double = 0.0
+    var lat: Double = 0.0
 
     fun dateFromString(strDate: String?): Date? {
         if (TextUtils.isEmpty(strDate)) return null

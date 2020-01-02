@@ -1,6 +1,7 @@
 package com.bolo.bolomap.ui.diapoarama
 
 import android.annotation.SuppressLint
+import android.media.Image
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bolo.bolomap.R
+import com.bolo.bolomap.utils.ImageUtils
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.view_item_list_diapo.view.imgPic
 import java.lang.Exception
@@ -34,14 +36,10 @@ class DiapoAdapter(val fragment: DiapoFragment,val urls: List<String>) : Recycle
             try {
 
                 if (urls[position] == "null"){
-                    Glide.with(fragment)
-                        .load(Uri.parse(urls[position+1]))
-                        .into(imgPic)
+                    ImageUtils.loadImageUriResize(urls[position+1],R.drawable.baseline_add_photo_alternate_black_48,imgPic,context)
                 }
                 else {
-                    Glide.with(fragment)
-                        .load(Uri.parse(urls[position]))
-                        .into(imgPic)
+                    ImageUtils.loadImageUriResize(urls[position],R.drawable.baseline_add_photo_alternate_black_48,imgPic,context)
                 }
             }
             catch (e:Exception){
