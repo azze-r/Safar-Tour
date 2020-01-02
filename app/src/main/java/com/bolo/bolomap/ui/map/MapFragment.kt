@@ -2,15 +2,15 @@ package com.bolo.bolomap.ui.map
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
@@ -27,10 +27,9 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.*
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_home.*
-import androidx.appcompat.app.AlertDialog
-import com.google.android.gms.maps.model.*
 
 
 class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -42,6 +41,9 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     var imgList: ImageView? = null
     var imageSave: ImageView? = null
     var imageAdd: ImageView? = null
+    var imageGo: ImageView? = null
+    var imgAvatar: ImageView? = null
+    var textTitle: TextView? = null
     var cardAlbum: CardView? = null
     var uri: Uri? = null
 
@@ -64,9 +66,12 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         imageSave = root.findViewById(R.id.imageSave)
         imageAdd = root.findViewById(R.id.imageAdd)
+        imgAvatar =  root.findViewById(R.id.imgAvatar)
         cardAlbum = root.findViewById(R.id.cardAlbum)
         imgList = root.findViewById(R.id.imgList)
         imgLocation = root.findViewById(R.id.imgLocation)
+        textTitle = root.findViewById(R.id.textTitle)
+        imageGo = root.findViewById(R.id.imgGo)
         imgDelete = root.findViewById(R.id.imgDelete)
         myconstraint = root.findViewById<View>(R.id.constraint) as CardView
         mMapView = root.findViewById(R.id.mapView)
@@ -184,20 +189,27 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                         ImageUtils.loadImageUriResize(
                             it.photo,
                             R.drawable.baseline_add_photo_alternate_black_48,
-                            imgAvatar,
+                            imgAvatar!!,
                             it1
                         )
                     }
 
                     if (it.label.isNullOrEmpty())
-                        textTitle.text = "No Title"
+                        textTitle?.text = "No Title"
                     else
-                        textTitle.text = it.label
+                        textTitle?.text = it.label
 
                     imgAvatar?.setOnClickListener {
+                        val intent = Intent()
+                        intent.type = "image/*"
+                        intent.action = Intent.ACTION_OPEN_DOCUMENT
+                        startActivityForResult(Intent.createChooser(intent, "Select picture"), 2)
+                    }
+
+                    imgGo?.setOnClickListener {
                         val bundle = bundleOf("albumId" to p0.tag)
                         view?.findNavController()
-                            ?.navigate(com.bolo.bolomap.R.id.action_navigation_home_to_navigation_diapo, bundle)
+                            ?.navigate(R.id.action_navigation_home_to_navigation_diapo, bundle)
                     }
                 }
 
@@ -236,6 +248,21 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                     imageAdd?.let { img ->
                         ImageUtils.loadImageUriResize(uri.toString(),R.drawable.baseline_add_photo_alternate_black_48,img,context!!)
                     }
+                }
+            }
+        }
+
+        if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                uri = data?.data!!
+                context?.let {
+                    imgAvatar?.let { img ->
+                        ImageUtils.loadImageUriResize(uri.toString(),R.drawable.baseline_add_photo_alternate_black_48,img,context!!)
+                        currentAlbum?.photo = uri.toString()
+                        currentAlbum?.let { it1 -> (activity as MainActivity).updatePhoto(it1) }
+
+                    }
+
                 }
             }
         }
