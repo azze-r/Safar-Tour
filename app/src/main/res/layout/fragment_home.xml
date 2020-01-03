@@ -70,6 +70,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/constraint"
         android:layout_width="0dp"
@@ -78,6 +79,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/imgList"
         map:cardCornerRadius="4dp"
         map:layout_constraintBottom_toBottomOf="@+id/mapView"
         map:layout_constraintEnd_toEndOf="parent"
@@ -130,10 +132,10 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imgGo"
+                android:id="@+id/imgadd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/baseline_send_black_48"
+                android:src="@drawable/baseline_add_photo_alternate_black_48"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -149,21 +151,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@android:drawable/ic_menu_mylocation" />
-    <ImageView
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/imgList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        app:backgroundTint="@color/colorWhite"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/baseline_sort_black_48"
+        android:src="@drawable/baseline_sort_black_48"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/imgStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/baseline_style_black_48"
+        app:backgroundTint="@color/colorWhite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
+        android:background="@color/colorWhite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="@string/long_click_on_map_to_create_album"
+        android:text="  * Long Click on map to create album  "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

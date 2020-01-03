@@ -26,12 +26,9 @@ class DiapoAdapter(val fragment: DiapoFragment,val urls: List<String>) : Recycle
         holder.itemView.apply {
 
             try {
-
                 ImageUtils.loadImageUriResize(urls[position],R.drawable.baseline_add_photo_alternate_black_48,imgPic,context)
-
             }
             catch (e:Exception){
-
             }
 
             setOnClickListener {

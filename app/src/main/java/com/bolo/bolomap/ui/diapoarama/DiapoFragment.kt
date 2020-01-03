@@ -2,10 +2,7 @@ package com.bolo.bolomap.ui.diapoarama
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,20 +19,14 @@ import com.bolo.bolomap.R
 import com.bolo.bolomap.db.entities.Photo
 import com.bolo.bolomap.db.viewmodel.MainActivity
 import com.bolo.bolomap.ui.travelog.ListAlbumsViewModel
-import android.R.attr.data
-import android.R.attr.data
-import android.content.ClipData
-
-
-
-
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class DiapoFragment : Fragment() {
 
     private lateinit var listAlbumsViewModel: ListAlbumsViewModel
     lateinit var photo:Photo
-    lateinit var imgAdd:ImageView
+    lateinit var imgAdd:FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -5,6 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,8 +29,9 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.fragment_home.*
+import java.lang.Exception
 
 
 class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -38,10 +40,12 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     private lateinit var homeViewModel: MapViewModel
     var textInputEditText: TextInputEditText? = null
     var myMarker: Marker? = null
-    var imgList: ImageView? = null
+    var imgList: FloatingActionButton? = null
+    var imgStyle: FloatingActionButton? = null
+
     var imageSave: ImageView? = null
     var imageAdd: ImageView? = null
-    var imageGo: ImageView? = null
+    var imageadd: ImageView? = null
     var imgAvatar: ImageView? = null
     var textTitle: TextView? = null
     var cardAlbum: CardView? = null
@@ -60,7 +64,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
-
         homeViewModel = ViewModelProviders.of(this).get(MapViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
@@ -71,15 +74,15 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         imgList = root.findViewById(R.id.imgList)
         imgLocation = root.findViewById(R.id.imgLocation)
         textTitle = root.findViewById(R.id.textTitle)
-        imageGo = root.findViewById(R.id.imgGo)
+        imageadd = root.findViewById(R.id.imgadd)
         imgDelete = root.findViewById(R.id.imgDelete)
         myconstraint = root.findViewById<View>(R.id.constraint) as CardView
         mMapView = root.findViewById(R.id.mapView)
         textInputEditText = root.findViewById(R.id.textInputEditText)
-
+        imgStyle = root.findViewById(R.id.imgStyle)
         mMapView!!.onCreate(savedInstanceState)
         mMapView!!.onResume()
-
+        imageadd = root.findViewById(R.id.imgadd)
         try {
             MapsInitializer.initialize(activity!!.applicationContext)
         } catch (e: Throwable) {
@@ -100,6 +103,47 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         val act = activity as MainActivity
 
         if (p0 != null) {
+
+            imgStyle?.setOnClickListener {
+                when ((0..4).random()) {
+                    0 -> try {
+                        p0.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                context, R.raw.aubergine));
+                    } catch (e:Exception){
+                        Log.i("tryhard","fk")
+                    }
+                    1 -> try {
+                        p0.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                context, R.raw.dark));
+                    } catch (e:Exception){
+                        Log.i("tryhard","fk")
+                    }
+                    2 -> try {
+                        p0.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                context, R.raw.night));
+                    } catch (e:Exception){
+                        Log.i("tryhard","fk")
+                    }
+                    3 -> try {
+                        p0.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                context, R.raw.retro));
+                    } catch (e:Exception){
+                        Log.i("tryhard","fk")
+                    }
+                    4 -> try {
+                        p0.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                context, R.raw.silver));
+                    } catch (e:Exception){
+                        Log.i("tryhard","fk")
+                    }
+                }
+
+            }
 
             val photoDao = (activity as MainActivity).getDao()
 
@@ -127,9 +171,12 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
             }
 
             act.mGoogleMap.setOnMapLongClickListener {
+                uri = null
                 DateUtils.long = it.longitude
                 DateUtils.lat = it.latitude
                 cardAlbum?.visibility = View.VISIBLE
+                imgAvatar?.setImageResource(R.drawable.baseline_add_photo_alternate_black_48)
+                textTitle?.text = ""
             }
 
             imgLocation.setOnClickListener {
@@ -182,6 +229,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         photoDao!!.findById(p0?.tag as Int).observe(this,
             Observer {
                 if (it != null) {
+                    Log.i("tryhard",it.toString())
                     currentAlbum = it
                     DateUtils.lat = it.lat!!
                     DateUtils.long = it.long!!
@@ -200,16 +248,16 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                         textTitle?.text = it.label
 
                     imgAvatar?.setOnClickListener {
+                        val bundle = bundleOf("albumId" to p0.tag)
+                        view?.findNavController()
+                            ?.navigate(R.id.action_navigation_home_to_navigation_diapo, bundle)
+                    }
+
+                    imageadd?.setOnClickListener {
                         val intent = Intent()
                         intent.type = "image/*"
                         intent.action = Intent.ACTION_OPEN_DOCUMENT
                         startActivityForResult(Intent.createChooser(intent, "Select picture"), 2)
-                    }
-
-                    imgGo?.setOnClickListener {
-                        val bundle = bundleOf("albumId" to p0.tag)
-                        view?.findNavController()
-                            ?.navigate(R.id.action_navigation_home_to_navigation_diapo, bundle)
                     }
                 }
 

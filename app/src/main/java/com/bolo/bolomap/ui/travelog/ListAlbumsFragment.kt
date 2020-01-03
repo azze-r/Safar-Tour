@@ -15,12 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bolo.bolomap.R
 import com.bolo.bolomap.db.dao.PhotoDao
 import com.bolo.bolomap.db.viewmodel.MainActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListAlbumsFragment : Fragment() {
 
     private lateinit var listAlbumsViewModel: ListAlbumsViewModel
     var photoDao: PhotoDao? = null
-    var map: ImageView? = null
+    var map: FloatingActionButton? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,

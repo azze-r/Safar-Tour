@@ -9,6 +9,6 @@
     <string name="format_date">dd/MM/yyyy HH:mm</string>
     <string name="load_media">choisir un album</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="long_click_on_map_to_create_album">* Long Click on map to create album</string>
+    <string name="long_click_on_map_to_create_album">  * Long Click on map to create album  </string>
     <string name="title_of_the_new_album">title of the new album</string>
 </resources>
