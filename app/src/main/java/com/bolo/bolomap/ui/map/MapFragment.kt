@@ -142,11 +142,19 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 } catch (e:Exception){
                     Log.i("tryhard","fk")
                 }
+                5 -> try {
+                    p0.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                            context, R.raw.standard));
+                    s = 5
+                } catch (e:Exception){
+                    Log.i("tryhard","fk")
+                }
             }
 
 
             imgStyle?.setOnClickListener {
-                when ((0..4).random()) {
+                when ((0..5).random()) {
                     0 -> try {
                         p0.setMapStyle(
                             MapStyleOptions.loadRawResourceStyle(
@@ -188,6 +196,15 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                     } catch (e:Exception){
                         Log.i("tryhard","fk")
                     }
+                    5 -> try {
+                        p0.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                context, R.raw.standard));
+                        s = 5
+                    } catch (e:Exception){
+                        Log.i("tryhard","fk")
+                    }
+
                 }
 
             }
