@@ -2,6 +2,7 @@ package com.bolo.bolomap.ui.map
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -42,7 +43,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     var myMarker: Marker? = null
     var imgList: FloatingActionButton? = null
     var imgStyle: FloatingActionButton? = null
-
+    var s :Int? = null
     var imageSave: ImageView? = null
     var imageAdd: ImageView? = null
     var imageadd: ImageView? = null
@@ -104,12 +105,54 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         if (p0 != null) {
 
+            when (getMapStyle()) {
+                0 -> try {
+                    p0.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                            context, R.raw.aubergine))
+
+                } catch (e:Exception){
+                    Log.i("tryhard","fk")
+                }
+                1 -> try {
+                    p0.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                            context, R.raw.dark));
+                } catch (e:Exception){
+                    Log.i("tryhard","fk")
+                }
+                2 -> try {
+                    p0.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                            context, R.raw.night));
+                } catch (e:Exception){
+                    Log.i("tryhard","fk")
+                }
+                3 -> try {
+                    p0.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                            context, R.raw.retro));
+                } catch (e:Exception){
+                    Log.i("tryhard","fk")
+                }
+                4 -> try {
+                    p0.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                            context, R.raw.silver));
+                } catch (e:Exception){
+                    Log.i("tryhard","fk")
+                }
+            }
+
+
             imgStyle?.setOnClickListener {
                 when ((0..4).random()) {
                     0 -> try {
                         p0.setMapStyle(
                             MapStyleOptions.loadRawResourceStyle(
-                                context, R.raw.aubergine));
+                                context, R.raw.aubergine))
+                        s = 0
+
                     } catch (e:Exception){
                         Log.i("tryhard","fk")
                     }
@@ -117,6 +160,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                         p0.setMapStyle(
                             MapStyleOptions.loadRawResourceStyle(
                                 context, R.raw.dark));
+                        s = 1
                     } catch (e:Exception){
                         Log.i("tryhard","fk")
                     }
@@ -124,6 +168,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                         p0.setMapStyle(
                             MapStyleOptions.loadRawResourceStyle(
                                 context, R.raw.night));
+                        s = 2
                     } catch (e:Exception){
                         Log.i("tryhard","fk")
                     }
@@ -131,6 +176,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                         p0.setMapStyle(
                             MapStyleOptions.loadRawResourceStyle(
                                 context, R.raw.retro));
+                        s = 3
                     } catch (e:Exception){
                         Log.i("tryhard","fk")
                     }
@@ -138,6 +184,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                         p0.setMapStyle(
                             MapStyleOptions.loadRawResourceStyle(
                                 context, R.raw.silver));
+                        s = 4
                     } catch (e:Exception){
                         Log.i("tryhard","fk")
                     }
@@ -316,4 +363,28 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         }
     }
 
+    fun getMapStyle(): Int {
+        val sharedPref = activity?.getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE
+        )
+
+        return sharedPref?.getInt(getString(R.string.flag_time), 0)!!
+
+    }
+
+
+    fun setMapStyle(s:Int){
+        val sharedPref = activity?.getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE
+        )
+
+        val editor = sharedPref?.edit()
+        editor?.putInt(getString(R.string.flag_time), s)
+        editor?.apply()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        s?.let { setMapStyle(it) }
+    }
 }
