@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,6 +18,7 @@ import com.bolo.bolomap.R
 import com.bolo.bolomap.db.entities.Photo
 import com.bolo.bolomap.db.viewmodel.MainActivity
 import com.bolo.bolomap.ui.travelog.ListAlbumsViewModel
+import com.bolo.bolomap.utils.ImageUtils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -68,7 +68,8 @@ class DiapoFragment : Fragment() {
         return root
     }
 
-    fun navDetails() {
+    fun navDetails(position: Int) {
+        ImageUtils.position = position
         val bundle = bundleOf("albumId" to photo.id)
         view?.findNavController()?.navigate(R.id.action_navigation_diapo_to_navigation_detail,bundle)
     }

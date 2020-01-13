@@ -1,16 +1,13 @@
 package com.bolo.bolomap.ui.detailsDiapo
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
-
 import com.bolo.bolomap.R
 import com.bolo.bolomap.utils.ImageUtils
-import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.SliderViewAdapter
 
 class DetailSliderAdapter(private val context: Context, private val urls: Array<String>) :
@@ -21,6 +18,7 @@ class DetailSliderAdapter(private val context: Context, private val urls: Array<
         this.mCount = count
     }
 
+    @SuppressLint("InflateParams")
     override fun onCreateViewHolder(parent: ViewGroup): SliderAdapterVH {
         val inflate =
             LayoutInflater.from(parent.context).inflate(R.layout.image_slider_layout_item, null)
@@ -37,12 +35,9 @@ class DetailSliderAdapter(private val context: Context, private val urls: Array<
         return mCount
     }
 
-    inner class SliderAdapterVH(var itemView: View) :
+    inner class SliderAdapterVH(itemView: View) :
         SliderViewAdapter.ViewHolder(itemView) {
-        var imageViewBackground: ImageView
+        var imageViewBackground: ImageView = itemView.findViewById(R.id.iv_auto_image_slider)
 
-        init {
-            imageViewBackground = itemView.findViewById(R.id.iv_auto_image_slider)
-        }
     }
 }

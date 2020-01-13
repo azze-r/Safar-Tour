@@ -216,10 +216,11 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                     photos = it as ArrayList<Photo>
                     act.mGoogleMap.clear()
                     for (p in photos) {
-                        icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_travel_rounded)
+                        icon = BitmapDescriptorFactory.fromResource(R.mipmap.flight_icon)
                         myMarker = act.mGoogleMap.addMarker(
                             MarkerOptions()
                                 .icon(icon)
+                                .title(p.label)
                                 .position(LatLng(p.lat!!, p.long!!)))
 
                         myMarker!!.tag = p.id

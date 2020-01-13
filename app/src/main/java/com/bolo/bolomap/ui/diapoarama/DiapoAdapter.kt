@@ -32,7 +32,7 @@ class DiapoAdapter(val fragment: DiapoFragment,val urls: List<String>) : Recycle
             }
 
             setOnClickListener {
-                fragment.navDetails()
+                fragment.navDetails(position)
             }
         }
     }

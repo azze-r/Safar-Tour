@@ -15,6 +15,7 @@ import com.bolo.bolomap.db.entities.Photo
 import com.bolo.bolomap.db.viewmodel.MainActivity
 import com.bolo.bolomap.ui.diapoarama.DiapoAdapter
 import com.bolo.bolomap.ui.travelog.ListAlbumsViewModel
+import com.bolo.bolomap.utils.ImageUtils
 import com.smarteist.autoimageslider.IndicatorAnimations
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
@@ -43,7 +44,6 @@ class DetailFragment : Fragment() {
                 if (photo.photos != null) {
                     val list = convertStringToArray(photo.photos!!)
                     val sliderView:SliderView =  root.findViewById(R.id.imageSlider)
-
                     val adapter = DetailSliderAdapter(context!!,list)
                     adapter.count = list.size
                     sliderView.sliderAdapter = adapter
@@ -52,11 +52,11 @@ class DetailFragment : Fragment() {
                     sliderView.autoCycleDirection = SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH
                     sliderView.indicatorSelectedColor = Color.WHITE
                     sliderView.indicatorUnselectedColor = Color.GRAY
-                    sliderView.startAutoCycle()
+                    sliderView.currentPagePosition = ImageUtils.position
 
-                    sliderView.setOnIndicatorClickListener { position ->
-                        sliderView.currentPagePosition = position
-                    }
+//                    sliderView.setOnIndicatorClickListener { position ->
+//                        sliderView.currentPagePosition = position
+//                    }
                 }
             })
 
