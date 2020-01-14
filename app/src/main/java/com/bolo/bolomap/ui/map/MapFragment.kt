@@ -41,11 +41,13 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     private lateinit var homeViewModel: MapViewModel
     var textInputEditText: TextInputEditText? = null
     var myMarker: Marker? = null
+    var isFABOpen = false
     var imgList: FloatingActionButton? = null
     var imgStyle: FloatingActionButton? = null
     var s :Int? = null
     var imageSave: ImageView? = null
     var imageAdd: ImageView? = null
+    var imageMenu: ImageView? = null
     var imageadd: ImageView? = null
     var imgAvatar: ImageView? = null
     var textTitle: TextView? = null
@@ -70,6 +72,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         imageSave = root.findViewById(R.id.imageSave)
         imageAdd = root.findViewById(R.id.imageAdd)
+        imageMenu = root.findViewById(R.id.imgMenu)
         imgAvatar =  root.findViewById(R.id.imgAvatar)
         cardAlbum = root.findViewById(R.id.cardAlbum)
         imgList = root.findViewById(R.id.imgList)
@@ -96,6 +99,13 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
             it.findNavController().navigate(R.id.action_navigation_home_to_navigation_dashboard)
         }
 
+        imageMenu!!.setOnClickListener {
+            if (isFABOpen)
+                closeFABMenu()
+            else
+                showFABMenu()
+
+        }
         return root
     }
 
@@ -289,6 +299,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     override fun onMarkerClick(p0: Marker?): Boolean {
 
         myconstraint?.visibility = View.VISIBLE
+        closeFABMenu()
         val photoDao = (activity as MainActivity).getDao()
 
         photoDao!!.findById(p0?.tag as Int).observe(this,
@@ -404,5 +415,25 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     override fun onPause() {
         super.onPause()
         s?.let { setMapStyle(it) }
+    }
+
+    private fun showFABMenu() {
+        myconstraint?.visibility = View.GONE
+
+        isFABOpen = true
+        imgList?.animate()?.translationX(-resources.getDimension(R.dimen.standard_75))
+        imgStyle?.animate()?.translationY(-resources.getDimension(R.dimen.standard_75))
+        imgLocation.animate()?.translationY(-resources.getDimension(R.dimen.standard_75))
+        imgLocation.animate()?.translationX(-resources.getDimension(R.dimen.standard_75))
+
+    }
+
+    private fun closeFABMenu() {
+        isFABOpen = false
+        imgList?.animate()?.translationX(0F)
+        imgStyle?.animate()?.translationY(0F)
+        imgLocation.animate()?.translationY(0F)
+        imgLocation.animate()?.translationX(0F)
+
     }
 }
