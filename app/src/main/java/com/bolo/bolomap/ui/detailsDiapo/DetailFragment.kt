@@ -47,16 +47,13 @@ class DetailFragment : Fragment() {
                     val adapter = DetailSliderAdapter(context!!,list)
                     adapter.count = list.size
                     sliderView.sliderAdapter = adapter
-                    sliderView.setIndicatorAnimation(IndicatorAnimations.SLIDE) //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+                    sliderView.setIndicatorAnimation(IndicatorAnimations.SLIDE)
                     sliderView.setSliderTransformAnimation(SliderAnimations.CUBEINROTATIONTRANSFORMATION)
                     sliderView.autoCycleDirection = SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH
                     sliderView.indicatorSelectedColor = Color.WHITE
                     sliderView.indicatorUnselectedColor = Color.GRAY
                     sliderView.currentPagePosition = ImageUtils.position
-
-//                    sliderView.setOnIndicatorClickListener { position ->
-//                        sliderView.currentPagePosition = position
-//                    }
+                    sliderView.setIndicatorVisibility(false)
                 }
             })
 
