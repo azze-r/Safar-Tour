@@ -222,7 +222,9 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
             val photoDao = (activity as MainActivity).getDao()
 
             photoDao!!.getAllPhotos().observe(this,
+
                 Observer {
+
                     photos = it as ArrayList<Photo>
                     act.mGoogleMap.clear()
                     for (p in photos) {
@@ -234,7 +236,9 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                                 .position(LatLng(p.lat!!, p.long!!)))
 
                         myMarker!!.tag = p.id
+
                     }
+
                 })
 
             act.mGoogleMap = p0
@@ -305,7 +309,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         photoDao!!.findById(p0?.tag as Int).observe(this,
             Observer {
                 if (it != null) {
-                    Log.i("tryhard",it.toString())
                     currentAlbum = it
                     DateUtils.lat = it.lat!!
                     DateUtils.long = it.long!!

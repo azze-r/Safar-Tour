@@ -3,6 +3,7 @@ package com.bolo.bolomap.ui.diapoarama
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,7 @@ class DiapoFragment : Fragment() {
     private lateinit var listAlbumsViewModel: ListAlbumsViewModel
     lateinit var photo:Photo
     lateinit var imgAdd:FloatingActionButton
-
+    var localRecycler:RecyclerView? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,18 +41,19 @@ class DiapoFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_all_diapo, container, false)
         imgAdd = root.findViewById(R.id.imgAdd)
 
-        val localRecycler:RecyclerView = root.findViewById(R.id.myrecycler)
-        localRecycler.layoutManager = StaggeredGridLayoutManager(3, LinearLayoutManager.VERTICAL)
+        localRecycler = root.findViewById(R.id.myrecycler)
+        localRecycler!!.layoutManager = StaggeredGridLayoutManager(3, LinearLayoutManager.VERTICAL)
 
         val photoDao = (activity as MainActivity).getDao()
 
         photoDao!!.findById(id).observe(this,
             Observer {
                 if (it != null) {
+                    Log.i("tryhard", "observe : $it")
                     photo = it
                     if (it.photos != null) {
                         val list = convertStringToArray(it.photos!!)
-                        localRecycler.adapter = DiapoAdapter(this, list.toList())
+                        localRecycler!!.adapter = DiapoAdapter(this, list.toList())
                     }
                 }
             })
@@ -72,6 +74,24 @@ class DiapoFragment : Fragment() {
         ImageUtils.position = position
         val bundle = bundleOf("albumId" to photo.id)
         view?.findNavController()?.navigate(R.id.action_navigation_diapo_to_navigation_detail,bundle)
+    }
+
+    fun deletePic(position: Int) {
+        var photos = ArrayList<String>()
+        if (photo.photos != null) {
+            Log.i("tryhard", "before delete $photo")
+
+            photos.addAll(convertStringToArray(photo.photos.toString()))
+
+            Log.i("tryhard", "element to delete " + photos[position])
+
+            photos.remove(photos[position])
+
+            Log.i("tryhard", "after delete $photos")
+
+            photo.photos = convertArrayToString(photos)
+            (activity as MainActivity).updatePhoto(photo)
+        }
     }
 
 

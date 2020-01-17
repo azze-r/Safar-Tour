@@ -81,6 +81,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/imgList"
         map:cardCornerRadius="4dp"
+
         map:layout_constraintBottom_toBottomOf="@+id/mapView"
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintStart_toStartOf="parent">
@@ -91,11 +92,14 @@
 
             <TextView
                 android:id="@+id/textTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:gravity="center"
                 android:textSize="30sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imgDelete"
                 map:layout_constraintEnd_toEndOf="parent"
                 map:layout_constraintStart_toEndOf="@+id/cardView"
