@@ -41,7 +41,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     private lateinit var homeViewModel: MapViewModel
     var textInputEditText: TextInputEditText? = null
     var myMarker: Marker? = null
-    var isFABOpen = false
+    var isFABOpen:Boolean ? = null
     var imgList: FloatingActionButton? = null
     var imgStyle: FloatingActionButton? = null
     var s :Int? = null
@@ -70,6 +70,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         homeViewModel = ViewModelProviders.of(this).get(MapViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
+        isFABOpen = false
         imageSave = root.findViewById(R.id.imageSave)
         imageAdd = root.findViewById(R.id.imageAdd)
         imageMenu = root.findViewById(R.id.imgMenu)
@@ -100,7 +101,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         }
 
         imageMenu!!.setOnClickListener {
-            if (isFABOpen)
+            if (isFABOpen!!)
                 closeFABMenu()
             else
                 showFABMenu()
@@ -421,6 +422,8 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     }
 
     private fun showFABMenu() {
+
+        imageMenu?.setImageDrawable(resources.getDrawable(R.drawable.baseline_remove_black_48))
         myconstraint?.visibility = View.GONE
 
         isFABOpen = true
@@ -432,6 +435,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     }
 
     private fun closeFABMenu() {
+        imageMenu?.setImageDrawable(resources.getDrawable(R.drawable.baseline_add_black_48))
         isFABOpen = false
         imgList?.animate()?.translationX(0F)
         imgStyle?.animate()?.translationY(0F)
