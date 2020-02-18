@@ -1,7 +1,6 @@
 package com.bolo.bolomap.ui.travelog
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bolo.bolomap.R
 import com.bolo.bolomap.db.entities.Photo
 import com.bolo.bolomap.utils.ImageUtils
-import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.view_item_list_medias.view.*
 
 
@@ -30,6 +28,11 @@ class ListAlbumsAdapter(val fragment: ListAlbumsFragment, val photos: List<Photo
         val photo = photos[position]
 
         holder.itemView.apply {
+
+            if (position == 1){
+                holder.itemView.setVisibility(View.GONE)
+                holder.itemView.setLayoutParams(RecyclerView.LayoutParams(0, 0))
+            }
             try {
                 ImageUtils.loadImageUriResize(photo.photo,R.drawable.baseline_add_photo_alternate_black_48,imgPic,context)
 

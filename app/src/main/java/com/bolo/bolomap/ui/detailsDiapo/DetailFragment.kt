@@ -1,22 +1,17 @@
 package com.bolo.bolomap.ui.detailsDiapo
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bolo.bolomap.R
 import com.bolo.bolomap.db.entities.Photo
 import com.bolo.bolomap.db.viewmodel.MainActivity
-import com.bolo.bolomap.ui.diapoarama.DiapoAdapter
 import com.bolo.bolomap.ui.travelog.ListAlbumsViewModel
 import com.bolo.bolomap.utils.ImageUtils
-import com.smarteist.autoimageslider.IndicatorAnimations
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 
@@ -47,11 +42,8 @@ class DetailFragment : Fragment() {
                     val adapter = DetailSliderAdapter(context!!,list)
                     adapter.count = list.size
                     sliderView.sliderAdapter = adapter
-                    sliderView.setIndicatorAnimation(IndicatorAnimations.SLIDE)
-                    sliderView.setSliderTransformAnimation(SliderAnimations.CUBEINROTATIONTRANSFORMATION)
+                    //sliderView.setSliderTransformAnimation(SliderAnimations.ZOOMOUTTRANSFORMATION)
                     sliderView.autoCycleDirection = SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH
-                    sliderView.indicatorSelectedColor = Color.WHITE
-                    sliderView.indicatorUnselectedColor = Color.GRAY
                     sliderView.currentPagePosition = ImageUtils.position
                     sliderView.setIndicatorVisibility(false)
                 }
