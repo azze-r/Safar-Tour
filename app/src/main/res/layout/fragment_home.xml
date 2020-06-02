@@ -101,8 +101,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/imgDelete"
                 app:layout_constraintTop_toTopOf="parent"
                 map:layout_constraintEnd_toEndOf="parent"
-                map:layout_constraintStart_toEndOf="@+id/cardView"
-                map:layout_constraintTop_toTopOf="@+id/cardView"
                 tools:text="TextView" />
 
             <androidx.cardview.widget.CardView
