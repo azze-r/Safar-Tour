@@ -160,7 +160,6 @@ class MainActivity : BaseActivity() {
                     12.0f
                 )
             )
-
     }
 
 

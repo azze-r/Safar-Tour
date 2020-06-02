@@ -25,14 +25,11 @@ import com.bolo.bolomap.utils.BaseActivity.Companion.PERMISSIONS_READ_LOCATION
 import com.bolo.bolomap.utils.BaseFragment
 import com.bolo.bolomap.utils.DateUtils
 import com.bolo.bolomap.utils.ImageUtils
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.MapsInitializer
-import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveListener
 import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
-import java.lang.Exception
 
 
 class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -96,9 +93,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         mMapView!!.getMapAsync(this)
 
-        imgList!!.setOnClickListener {
-            it.findNavController().navigate(R.id.action_navigation_home_to_navigation_dashboard)
-        }
+
 
         imageMenu!!.setOnClickListener {
             if (isFABOpen!!)
@@ -243,6 +238,16 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 })
 
             act.mGoogleMap = p0
+
+            if (DateUtils.getCameraPosition() != null) {
+                val coordinate = LatLng(
+                    DateUtils.getCameraPosition()!!.latitude,
+                    DateUtils.getCameraPosition()!!.longitude
+                )
+                val yourLocation: CameraUpdate = CameraUpdateFactory.newLatLngZoom(coordinate, 12F)
+                act.mGoogleMap.moveCamera(yourLocation)
+            }
+
             act.mGoogleMap.setOnMarkerClickListener(this)
 
             act.mGoogleMap.setOnMapClickListener {
@@ -266,8 +271,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                     PERMISSIONS_READ_LOCATION
                 )
             }
-
-
 
             imageSave!!.setOnClickListener {
                 val photo = Photo(
@@ -295,6 +298,13 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 startActivityForResult(Intent.createChooser(intent, "Select picture"), 1)
             }
 
+            imgList!!.setOnClickListener {
+                it.findNavController().navigate(R.id.action_navigation_home_to_navigation_dashboard)
+            }
+
+            act.mGoogleMap.setOnCameraMoveListener(OnCameraMoveListener {
+                DateUtils.setCameraPosition(act.mGoogleMap.cameraPosition.target)
+            })
 
         }
 
@@ -404,7 +414,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         return sharedPref?.getInt(getString(R.string.flag_time), 0)!!
 
     }
-
 
     fun setMapStyle(s:Int){
         val sharedPref = activity?.getSharedPreferences(
