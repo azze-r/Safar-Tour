@@ -23,7 +23,7 @@ import com.bolo.bolomap.db.entities.Photo
 import com.bolo.bolomap.db.viewmodel.MainActivity
 import com.bolo.bolomap.utils.BaseActivity.Companion.PERMISSIONS_READ_LOCATION
 import com.bolo.bolomap.utils.BaseFragment
-import com.bolo.bolomap.utils.DateUtils
+import com.bolo.bolomap.utils.MapUtils
 import com.bolo.bolomap.utils.ImageUtils
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.GoogleMap.OnCameraMoveListener
@@ -224,7 +224,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                     photos = it as ArrayList<Photo>
                     act.mGoogleMap.clear()
                     for (p in photos) {
-                        icon = BitmapDescriptorFactory.fromResource(R.mipmap.flight_icon)
+                        icon = BitmapDescriptorFactory.fromResource(R.mipmap.bleu_location)
                         myMarker = act.mGoogleMap.addMarker(
                             MarkerOptions()
                                 .icon(icon)
@@ -239,12 +239,12 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
             act.mGoogleMap = p0
 
-            if (DateUtils.getCameraPosition() != null) {
+            if (MapUtils.getCameraPosition() != null) {
                 val coordinate = LatLng(
-                    DateUtils.getCameraPosition()!!.latitude,
-                    DateUtils.getCameraPosition()!!.longitude
+                    MapUtils.getCameraPosition()!!.latitude,
+                    MapUtils.getCameraPosition()!!.longitude
                 )
-                val yourLocation: CameraUpdate = CameraUpdateFactory.newLatLngZoom(coordinate, 12F)
+                val yourLocation: CameraUpdate = CameraUpdateFactory.newLatLngZoom(coordinate, MapUtils.getCameraZoo())
                 act.mGoogleMap.moveCamera(yourLocation)
             }
 
@@ -257,8 +257,8 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
             act.mGoogleMap.setOnMapLongClickListener {
                 uri = null
-                DateUtils.long = it.longitude
-                DateUtils.lat = it.latitude
+                MapUtils.long = it.longitude
+                MapUtils.lat = it.latitude
                 cardAlbum?.visibility = View.VISIBLE
                 imgAvatar?.setImageResource(R.drawable.baseline_add_photo_alternate_black_48)
                 textTitle?.text = ""
@@ -274,8 +274,8 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
             imageSave!!.setOnClickListener {
                 val photo = Photo(
-                    long = DateUtils.long,
-                    lat = DateUtils.lat,
+                    long = MapUtils.long,
+                    lat = MapUtils.lat,
                     photo = uri.toString(),
                     date = null,
                     description = null,
@@ -302,9 +302,10 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 it.findNavController().navigate(R.id.action_navigation_home_to_navigation_dashboard)
             }
 
-            act.mGoogleMap.setOnCameraMoveListener(OnCameraMoveListener {
-                DateUtils.setCameraPosition(act.mGoogleMap.cameraPosition.target)
-            })
+            act.mGoogleMap.setOnCameraMoveListener {
+                MapUtils.setCameraPosition(act.mGoogleMap.cameraPosition.target)
+                MapUtils.setCameraZoom(act.mGoogleMap.cameraPosition.zoom)
+            }
 
         }
 
@@ -321,12 +322,12 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
             Observer {
                 if (it != null) {
                     currentAlbum = it
-                    DateUtils.lat = it.lat!!
-                    DateUtils.long = it.long!!
+                    MapUtils.lat = it.lat!!
+                    MapUtils.long = it.long!!
                     context?.let { it1 ->
                         ImageUtils.loadImageUriResize(
                             it.photo,
-                            R.drawable.baseline_add_photo_alternate_black_48,
+                            R.drawable.ic_dashboard_black_24dp,
                             imgAvatar!!,
                             it1
                         )
