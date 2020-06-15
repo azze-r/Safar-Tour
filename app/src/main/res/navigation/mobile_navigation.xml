@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.bolo.bolomap.ui.map.MapFragment"
+        android:name="com.travel.in.ui.map.MapFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.bolo.bolomap.ui.travelog.ListAlbumsFragment"
+        android:name="com.travel.in.ui.travelog.ListAlbumsFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" >
 
@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/navigation_diapo"
-        android:name="com.bolo.bolomap.ui.diapoarama.DiapoFragment"
+        android:name="com.travel.in.ui.diapoarama.DiapoFragment"
         android:label="Display Diapo"
         tools:layout="@layout/fragment_dashboard" >
         <action
@@ -74,7 +74,7 @@
 
     <fragment
         android:id="@+id/navigation_detail"
-        android:name="com.bolo.bolomap.ui.detailsDiapo.DetailFragment"
+        android:name="com.travel.in.ui.detailsDiapo.DetailFragment"
         android:label="Details Diapo"
         tools:layout="@layout/fragment_detail_diapo" >
         <argument

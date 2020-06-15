@@ -19,7 +19,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardAlbum"
         android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_height="150dp"
         android:visibility="gone"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,22 +40,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/textInputEditText"
-                app:layout_constraintStart_toStartOf="@+id/textInputEditText"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/imageAdd"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/baseline_add_photo_alternate_black_48" />
-            </androidx.cardview.widget.CardView>
-
 
             <ImageView
                 android:id="@+id/imageSave"
@@ -81,7 +65,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/imgList"
         map:cardCornerRadius="4dp"
-
         map:layout_constraintBottom_toBottomOf="@+id/mapView"
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintStart_toStartOf="parent">
@@ -94,10 +77,11 @@
                 android:id="@+id/textTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:gravity="center"
                 android:textSize="30sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imgDelete"
                 app:layout_constraintStart_toEndOf="@+id/cardView"
                 app:layout_constraintTop_toTopOf="parent"
                 map:layout_constraintEnd_toEndOf="parent"
@@ -128,17 +112,12 @@
                 android:id="@+id/imgDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/baseline_delete_black_48"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imgadd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_add_photo_alternate_black_48"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/round_delete_outline_black_48"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

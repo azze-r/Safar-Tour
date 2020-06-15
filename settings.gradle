@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name='BoloMap'
+rootProject.name='travelIn'
