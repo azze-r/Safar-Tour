@@ -1,4 +1,4 @@
-package com.travel.`in`.ui.travelog
+package com.travel.`in`.ui.albums
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -29,10 +29,6 @@ class ListAlbumsAdapter(val fragment: ListAlbumsFragment, val photos: List<Photo
 
         holder.itemView.apply {
 
-            if (position == 1){
-                holder.itemView.visibility = View.GONE
-                holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
-            }
             try {
 
                 if (photo.photos != null) {

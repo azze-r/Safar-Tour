@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Travel Connected</string>
     <string name="title_home">Map</string>
-    <string name="title_dashboard">Travelog</string>
+    <string name="title_dashboard">Albums</string>
     <string name="description">Description</string>
     <string name="Title">Titre</string>
     <string name="save">Enregistrer</string>
@@ -13,4 +13,5 @@
     <string name="title_of_the_new_album">title of the new album</string>
     <string name="preference_file_key">com.travel.in</string>
     <string name="flag_time">map_value</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

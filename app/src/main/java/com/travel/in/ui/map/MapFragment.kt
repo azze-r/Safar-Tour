@@ -1,6 +1,7 @@
 package com.travel.`in`.ui.map
 
 import android.Manifest
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -38,11 +40,8 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
     var textInputEditText: TextInputEditText? = null
     var myMarker: Marker? = null
     var isFABOpen:Boolean ? = null
-    var imgList: FloatingActionButton? = null
-    var imgStyle: FloatingActionButton? = null
     var s :Int? = null
     var imageSave: ImageView? = null
-    var imageMenu: ImageView? = null
     var imgAvatar: ImageView? = null
     var textTitle: TextView? = null
     var cardAlbum: CardView? = null
@@ -66,36 +65,24 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         isFABOpen = false
         imageSave = root.findViewById(R.id.imageSave)
-        imageMenu = root.findViewById(R.id.imgMenu)
         imgAvatar =  root.findViewById(R.id.imgAvatar)
         cardAlbum = root.findViewById(R.id.cardAlbum)
-        imgList = root.findViewById(R.id.imgList)
         imgLocation = root.findViewById(R.id.imgLocation)
         textTitle = root.findViewById(R.id.textTitle)
         imgDelete = root.findViewById(R.id.imgDelete)
         myconstraint = root.findViewById<View>(R.id.constraint) as CardView
         mMapView = root.findViewById(R.id.mapView)
         textInputEditText = root.findViewById(R.id.textInputEditText)
-        imgStyle = root.findViewById(R.id.imgStyle)
         mMapView!!.onCreate(savedInstanceState)
         mMapView!!.onResume()
         try {
-            MapsInitializer.initialize(activity!!.applicationContext)
+            MapsInitializer.initialize(requireActivity().applicationContext)
         } catch (e: Throwable) {
             e.printStackTrace()
         }
 
         mMapView!!.getMapAsync(this)
 
-
-
-        imageMenu!!.setOnClickListener {
-            if (isFABOpen!!)
-                closeFABMenu()
-            else
-                showFABMenu()
-
-        }
         return root
     }
 
@@ -105,108 +92,12 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
         if (p0 != null) {
 
-            when (getMapStyle()) {
-                0 -> try {
-                    p0.setMapStyle(
-                        MapStyleOptions.loadRawResourceStyle(
-                            context, R.raw.aubergine))
-
-                } catch (e:Exception){
-                    Log.i("tryhard","fk")
-                }
-                1 -> try {
-                    p0.setMapStyle(
-                        MapStyleOptions.loadRawResourceStyle(
-                            context, R.raw.dark));
-                } catch (e:Exception){
-                    Log.i("tryhard","fk")
-                }
-                2 -> try {
-                    p0.setMapStyle(
-                        MapStyleOptions.loadRawResourceStyle(
-                            context, R.raw.night));
-                } catch (e:Exception){
-                    Log.i("tryhard","fk")
-                }
-                3 -> try {
-                    p0.setMapStyle(
-                        MapStyleOptions.loadRawResourceStyle(
-                            context, R.raw.retro));
-                } catch (e:Exception){
-                    Log.i("tryhard","fk")
-                }
-                4 -> try {
-                    p0.setMapStyle(
-                        MapStyleOptions.loadRawResourceStyle(
-                            context, R.raw.silver));
-                } catch (e:Exception){
-                    Log.i("tryhard","fk")
-                }
-                5 -> try {
-                    p0.setMapStyle(
-                        MapStyleOptions.loadRawResourceStyle(
-                            context, R.raw.standard));
-                    s = 5
-                } catch (e:Exception){
-                    Log.i("tryhard","fk")
-                }
-            }
-
-
-            imgStyle?.setOnClickListener {
-                when ((0..5).random()) {
-                    0 -> try {
-                        p0.setMapStyle(
-                            MapStyleOptions.loadRawResourceStyle(
-                                context, R.raw.aubergine))
-                        s = 0
-
-                    } catch (e:Exception){
-                        Log.i("tryhard","fk")
-                    }
-                    1 -> try {
-                        p0.setMapStyle(
-                            MapStyleOptions.loadRawResourceStyle(
-                                context, R.raw.dark));
-                        s = 1
-                    } catch (e:Exception){
-                        Log.i("tryhard","fk")
-                    }
-                    2 -> try {
-                        p0.setMapStyle(
-                            MapStyleOptions.loadRawResourceStyle(
-                                context, R.raw.night));
-                        s = 2
-                    } catch (e:Exception){
-                        Log.i("tryhard","fk")
-                    }
-                    3 -> try {
-                        p0.setMapStyle(
-                            MapStyleOptions.loadRawResourceStyle(
-                                context, R.raw.retro));
-                        s = 3
-                    } catch (e:Exception){
-                        Log.i("tryhard","fk")
-                    }
-                    4 -> try {
-                        p0.setMapStyle(
-                            MapStyleOptions.loadRawResourceStyle(
-                                context, R.raw.silver));
-                        s = 4
-                    } catch (e:Exception){
-                        Log.i("tryhard","fk")
-                    }
-                    5 -> try {
-                        p0.setMapStyle(
-                            MapStyleOptions.loadRawResourceStyle(
-                                context, R.raw.standard));
-                        s = 5
-                    } catch (e:Exception){
-                        Log.i("tryhard","fk")
-                    }
-
-                }
-
+            try {
+                p0.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        context, R.raw.night));
+            } catch (e:Exception){
+                Log.i("tryhard","fk")
             }
 
             val photoDao = (activity as MainActivity).getDao()
@@ -287,11 +178,11 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                 cardAlbum!!.visibility = View.GONE
                 textInputEditText?.text = null
 
+                hideKeyboard(requireActivity())
+
+
             }
 
-            imgList!!.setOnClickListener {
-                it.findNavController().navigate(R.id.action_navigation_home_to_navigation_dashboard)
-            }
 
             act.mGoogleMap.setOnCameraMoveListener {
                 MapUtils.setCameraPosition(act.mGoogleMap.cameraPosition.target)
@@ -303,11 +194,20 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
     }
 
+    fun hideKeyboard(activity: Activity) {
+        val imm: InputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        //Find the currently focused view, so we can grab the correct window token from it.
+        var view = activity.currentFocus
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = View(activity)
+        }
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 
     override fun onMarkerClick(p0: Marker?): Boolean {
 
         myconstraint?.visibility = View.VISIBLE
-        closeFABMenu()
         val photoDao = (activity as MainActivity).getDao()
 
         photoDao!!.findById(p0?.tag as Int).observe(this,
@@ -354,7 +254,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         imgDelete.setOnClickListener {
             currentAlbum?.let {
                 // setup the alert builder
-                val builder = AlertDialog.Builder(context!!)
+                val builder = AlertDialog.Builder(requireContext())
                 builder.setMessage("Do you really want to delete this album?")
                     .setPositiveButton("yes"
                     )
@@ -401,26 +301,4 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         s?.let { setMapStyle(it) }
     }
 
-    private fun showFABMenu() {
-
-        imageMenu?.setImageDrawable(resources.getDrawable(R.drawable.baseline_remove_black_48))
-        myconstraint?.visibility = View.GONE
-
-        isFABOpen = true
-        imgList?.animate()?.translationX(-resources.getDimension(R.dimen.standard_75))
-        imgStyle?.animate()?.translationY(-resources.getDimension(R.dimen.standard_75))
-        imgLocation.animate()?.translationY(-resources.getDimension(R.dimen.standard_75))
-        imgLocation.animate()?.translationX(-resources.getDimension(R.dimen.standard_75))
-
-    }
-
-    private fun closeFABMenu() {
-        imageMenu?.setImageDrawable(resources.getDrawable(R.drawable.baseline_add_black_48))
-        isFABOpen = false
-        imgList?.animate()?.translationX(0F)
-        imgStyle?.animate()?.translationY(0F)
-        imgLocation.animate()?.translationY(0F)
-        imgLocation.animate()?.translationX(0F)
-
-    }
 }

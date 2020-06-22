@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.travel.in.ui.travelog.ListAlbumsFragment"
+        android:name="com.travel.in.ui.albums.ListAlbumsFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" >
 

@@ -1,4 +1,4 @@
-package com.travel.`in`.ui.travelog
+package com.travel.`in`.ui.albums
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +20,6 @@ class ListAlbumsFragment : Fragment() {
 
     private lateinit var listAlbumsViewModel: ListAlbumsViewModel
     var photoDao: PhotoDao? = null
-    var map: FloatingActionButton? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,20 +32,14 @@ class ListAlbumsFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
         val localRecycler:RecyclerView = root.findViewById(R.id.myrecycler)
-        map  = root.findViewById(R.id.map)
         photoDao = (activity as MainActivity).getDao()
 
-        photoDao!!.getAllPhotos().observe(this,
+        photoDao!!.getAllPhotos().observe(viewLifecycleOwner,
             Observer {
                 localRecycler.adapter = ListAlbumsAdapter(this, it)
             })
 
         localRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
-        map!!.setOnClickListener {
-            (activity as MainActivity).onBackPressed()
-        }
-
         return root
     }
 

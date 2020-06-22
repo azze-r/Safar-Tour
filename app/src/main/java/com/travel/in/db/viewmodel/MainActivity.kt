@@ -2,6 +2,7 @@ package com.travel.`in`.db.viewmodel
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,6 +14,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.travel.`in`.R
 import com.travel.`in`.db.dao.PhotoDao
 import com.travel.`in`.db.entities.Photo
@@ -24,7 +27,12 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 
 class MainActivity : BaseActivity() {
 
@@ -38,6 +46,7 @@ class MainActivity : BaseActivity() {
     private lateinit var photoViewModel: PhotoViewModel
     var tempUri:Uri? = null
     var photoDao:PhotoDao? = null
+    lateinit var nav_view: BottomNavigationView
 
     lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     lateinit var mGoogleMap: GoogleMap
@@ -50,8 +59,14 @@ class MainActivity : BaseActivity() {
         photoDao = database.photoDao()
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
+
+        nav_view = findViewById(R.id.nav_view)
+        val navController = findNavController(R.id.nav_host_fragment)
+        nav_view.setupWithNavController(navController)
+
     }
 
+    @SuppressLint("MissingPermission")
     override fun onPermissionGranted(permission: Int) {
         when (permission) {
 

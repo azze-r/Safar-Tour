@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.travel.`in`.R
 import com.travel.`in`.db.entities.Photo
 import com.travel.`in`.db.viewmodel.MainActivity
-import com.travel.`in`.ui.travelog.ListAlbumsViewModel
+import com.travel.`in`.ui.albums.ListAlbumsViewModel
 import com.travel.`in`.utils.ImageUtils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 

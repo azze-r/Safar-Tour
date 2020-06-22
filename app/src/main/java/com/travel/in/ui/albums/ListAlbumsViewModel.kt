@@ -1,4 +1,4 @@
-package com.travel.`in`.ui.travelog
+package com.travel.`in`.ui.albums
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
