@@ -10,17 +10,13 @@ import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
-import com.travel.`in`.R
-import com.travel.`in`.db.dao.PhotoDao
-import com.travel.`in`.db.entities.Photo
-import com.travel.`in`.utils.BaseActivity
-import com.travel.`in`.utils.ImageUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,11 +24,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import com.travel.`in`.R
+import com.travel.`in`.db.dao.PhotoDao
+import com.travel.`in`.db.entities.Photo
+import com.travel.`in`.utils.BaseActivity
+import com.travel.`in`.utils.ImageUtils
 
 class MainActivity : BaseActivity() {
 
@@ -46,13 +42,14 @@ class MainActivity : BaseActivity() {
     private lateinit var photoViewModel: PhotoViewModel
     var tempUri:Uri? = null
     var photoDao:PhotoDao? = null
-    lateinit var nav_view: BottomNavigationView
 
     lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     lateinit var mGoogleMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContentView(R.layout.activity_main)
 
         val database = RoomDatabase.getDatabase(this)
@@ -60,12 +57,21 @@ class MainActivity : BaseActivity() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
 
-        nav_view = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        nav_view.setupWithNavController(navController)
-
     }
 
+    fun statusBarTransparent(){
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+    }
+
+    fun statusBarNormal(){
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+    }
     @SuppressLint("MissingPermission")
     override fun onPermissionGranted(permission: Int) {
         when (permission) {
