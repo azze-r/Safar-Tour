@@ -122,12 +122,11 @@
 
     </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageView
         android:id="@+id/imgLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        app:backgroundTint="@color/colorWhite"
         android:layout_marginBottom="16dp"
         android:src="@android:drawable/ic_menu_mylocation"
         app:layout_constraintBottom_toBottomOf="parent"

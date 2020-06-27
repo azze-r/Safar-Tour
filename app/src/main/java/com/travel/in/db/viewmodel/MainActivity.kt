@@ -84,7 +84,6 @@ class MainActivity : BaseActivity() {
 
                 if (moove) {
                     mFusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
-                        // Got last known location. In some rare situations this can be null.
                         if (!(getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
                             && !(getSystemService(LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                             alertLocationDisabled()
@@ -174,7 +173,7 @@ class MainActivity : BaseActivity() {
             mGoogleMap.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(lat, long),
-                    12.0f
+                    20.0f
                 )
             )
     }

@@ -95,7 +95,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
             try {
                 p0.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
-                        context, R.raw.night));
+                        context, R.raw.aubergine));
             } catch (e:Exception){
                 Log.i("tryhard","fk")
             }

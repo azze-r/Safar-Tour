@@ -10,9 +10,8 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/round_explore_black_48"
+        android:icon="@mipmap/trav"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/round_explore_black_48"
         android:supportsRtl="true"
 
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
