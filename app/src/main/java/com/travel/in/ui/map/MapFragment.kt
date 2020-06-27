@@ -37,7 +37,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
 
 
     private lateinit var homeViewModel: MapViewModel
-    var textInputEditText: TextInputEditText? = null
     var myMarker: Marker? = null
     var isFABOpen:Boolean ? = null
     var s :Int? = null
@@ -68,11 +67,9 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         imgAvatar =  root.findViewById(R.id.imgAvatar)
         cardAlbum = root.findViewById(R.id.cardAlbum)
         imgLocation = root.findViewById(R.id.imgLocation)
-        textTitle = root.findViewById(R.id.textTitle)
         imgDelete = root.findViewById(R.id.imgDelete)
         myconstraint = root.findViewById<View>(R.id.constraint) as CardView
         mMapView = root.findViewById(R.id.mapView)
-        textInputEditText = root.findViewById(R.id.textInputEditText)
         mMapView!!.onCreate(savedInstanceState)
         mMapView!!.onResume()
         try {
@@ -171,16 +168,12 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                     photo = uri.toString(),
                     date = null,
                     description = null,
-                    label = textInputEditText?.text.toString(),
+                    label = "",
                     id = 0,photos= null
                 )
                 (activity as MainActivity).insertPhoto(photo)
                 cardAlbum!!.visibility = View.GONE
-                textInputEditText?.text = null
-
                 hideKeyboard(requireActivity())
-
-
             }
 
 
@@ -276,29 +269,5 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
         return true
     }
 
-
-    fun getMapStyle(): Int {
-        val sharedPref = activity?.getSharedPreferences(
-            getString(R.string.preference_file_key), Context.MODE_PRIVATE
-        )
-
-        return sharedPref?.getInt(getString(R.string.flag_time), 0)!!
-
-    }
-
-    fun setMapStyle(s:Int){
-        val sharedPref = activity?.getSharedPreferences(
-            getString(R.string.preference_file_key), Context.MODE_PRIVATE
-        )
-
-        val editor = sharedPref?.edit()
-        editor?.putInt(getString(R.string.flag_time), s)
-        editor?.apply()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        s?.let { setMapStyle(it) }
-    }
 
 }
