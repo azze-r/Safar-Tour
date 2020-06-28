@@ -15,32 +15,32 @@
 
 ## Screenshots
 
-[<img src="https://github.com/azze-r/Android-Keep-In-Touch/blob/master/Screenshot_20200628-130640_inTouch.jpg" width=160>](https://github.com/azze-r/Android-Keep-In-Touch/blob/master/Screenshot_20200628-130640_inTouch.jpg)
+[<img src="https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132739_TravelIn.jpg" width=160>](https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132739_TravelIn.jpg)
 
-[<img src="https://github.com/azze-r/Android-Keep-In-Touch/blob/master/Screenshot_20200628-130630_inTouch.jpg" width=160>](https://github.com/azze-r/Android-Keep-In-Touch/blob/master/Screenshot_20200628-130630_inTouch.jpg)
+[<img src="https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132748_TravelIn.jpg" width=160>](https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132748_TravelIn.jpg)
 
-[<img src="https://github.com/azze-r/Android-Keep-In-Touch/blob/master/Screenshot_20200628-130544_inTouch.jpg" width=160>](https://github.com/azze-r/Android-Keep-In-Touch/blob/master/Screenshot_20200628-130544_inTouch.jpg)
+[<img src="https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132759_TravelIn.jpg" width=160>](https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132759_TravelIn.jpg)
 
 ## Description
 
-Every day the application catch 3 randoms contacts, and you can swype right to open contact page to contact them, or you can swype left to dismiss.
+Take your travel log offline wherever you are
 
 ### Features
 
 * Support Day Night
-* Animation card swyping
-* Read on the contact list and pick some contacts
-* Save current contact in shared preferences
-* The contact list changes everyday
+* Custom google map to interact with
 
 ### Coming Features
 
-* Customize number of contacts that you can contact everyday
+* Save images on remote servor
 
 ### Technologies used
 * Kotlin
+* JetPack navigation
+* AndroidX
+* Room database
+* Single Activity
 * Material design
-* Permission manager
 
 ## Contribution
 Your ideas, translations, design changes, code cleaning, or real heavy code changes or any help is always welcome. The more is contribution the better it gets
