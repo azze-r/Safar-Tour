@@ -29,8 +29,6 @@ import com.travel.`in`.utils.MapUtils
 import com.travel.`in`.utils.ImageUtils
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputEditText
 
 
 class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -106,7 +104,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                     photos = it as ArrayList<Photo>
                     act.mGoogleMap.clear()
                     for (p in photos) {
-                        icon = BitmapDescriptorFactory.fromResource(R.mipmap.bleu_location)
+                        icon = BitmapDescriptorFactory.fromResource(R.drawable.new_location)
                         myMarker = act.mGoogleMap.addMarker(
                             MarkerOptions()
                                 .icon(icon)

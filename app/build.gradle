@@ -8,11 +8,11 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
-        applicationId "com.travel.in"
+        applicationId "com.bolo.bolomap"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 17
-        versionName "1.2.0"
+        versionCode 21
+        versionName "1.5.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
