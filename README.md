@@ -38,6 +38,3 @@ Take your travel log offline wherever you are
 * Room database
 * Single Activity
 * Material design
-
-## Contribution
-Your ideas, translations, design changes, code cleaning, or real heavy code changes or any help is always welcome. The more is contribution the better it gets
