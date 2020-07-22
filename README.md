@@ -10,14 +10,6 @@
 </p>
 <hr>
 
-## Screenshots
-
-[<img src="https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132739_TravelIn.jpg" width=160>](https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132739_TravelIn.jpg)
-
-[<img src="https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132748_TravelIn.jpg" width=160>](https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132748_TravelIn.jpg)
-
-[<img src="https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132759_TravelIn.jpg" width=160>](https://github.com/azze-r/Android-Travel-Connected/blob/master/Screenshot_20200628-132759_TravelIn.jpg)
-
 ## Description
 
 Take your travel log offline wherever you are
