@@ -9,9 +9,6 @@
 <p align="center"></p>
 </p>
 <hr>
-<b>WARNING: THIS IS A BETA VERSION of application, THEREFORE YOU MAY ENCOUNTER BUGS. You can OPEN the ISSUE on GITHUB REPOSITORY.</b>
-
-<h3 align="center">**Star :star:  this repo to show your support and it really does matter!** :clap:</h4>
 
 ## Screenshots
 
