@@ -1,4 +1,4 @@
-# inTouch
+# TravelIn
 
 <p align="center"><a href="https://github.com/azze-r/Android-Travel-Connected"><img src="https://github.com/azze-r/Android-Travel-Connected/blob/master/app/src/main/res/mipmap-mdpi/tra.jpg" width="150"></a></p> 
 
