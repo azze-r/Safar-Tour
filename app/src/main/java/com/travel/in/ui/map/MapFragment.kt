@@ -90,7 +90,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
             try {
                 p0.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
-                        context, R.raw.aubergine));
+                        context, R.raw.retro));
             } catch (e:Exception){
                 Log.i("tryhard","fk")
             }

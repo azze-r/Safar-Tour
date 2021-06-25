@@ -173,7 +173,7 @@ class MainActivity : BaseActivity() {
             mGoogleMap.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(lat, long),
-                    20.0f
+                    13.0f
                 )
             )
     }
