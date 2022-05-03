@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TravelIn</string>
+    <string name="app_name">Safar Tour</string>
     <string name="title_home">Map</string>
     <string name="title_dashboard">Albums</string>
     <string name="description">Description</string>
@@ -10,7 +10,7 @@
     <string name="load_media">choisir un album</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="long_click_on_map_to_create_album">  * Long Click on map to create album  </string>
-    <string name="title_of_the_new_album">Voulez-vous créer un nouvel album ici ?</string>
+    <string name="title_of_the_new_album">Create your album here?</string>
     <string name="preference_file_key">com.travel.in</string>
     <string name="flag_time">map_value</string>
     <string name="title_notifications">Notifications</string>

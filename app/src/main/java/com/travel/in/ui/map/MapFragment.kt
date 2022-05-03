@@ -213,7 +213,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                         if (currentAlbum!!.photos != null) {
                             ImageUtils.loadImageUriResize(
                                 ImageUtils.convertStringToArray(currentAlbum!!.photos.toString())[0],
-                                R.drawable.ic_dashboard_black_24dp,
+                                R.drawable.baseline_add_photo_alternate_black_48,
                                 imgAvatar!!,
                                 it1
                             )
@@ -221,7 +221,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickL
                         else{
                             ImageUtils.loadImageUriResize(
                                 it.photo,
-                                R.drawable.ic_dashboard_black_24dp,
+                                R.drawable.baseline_add_photo_alternate_black_48,
                                 imgAvatar!!,
                                 it1
                             )

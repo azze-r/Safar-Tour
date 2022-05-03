@@ -5,14 +5,14 @@ apply plugin: 'kotlin-android-extensions'
 //apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.bolo.bolomap"
         minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 21
-        versionName "1.5.0"
+        targetSdkVersion 30
+        versionCode 22
+        versionName "22"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
